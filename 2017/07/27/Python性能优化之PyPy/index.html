@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Python,性能优化,PyPy,JIT," />
 
 
 
@@ -95,13 +95,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="All tags">
-<meta property="og:url" content="http://coder-zhuyu.info/tags/index.html">
+<meta name="description" content="Python等动态语言是通过将程序编译成字节码，用虚拟机执行字节码来运行程序的，并不是直接执行的本地机器码，所以解释型动态语言一般会比编译型静态语言执行速度慢。python等动态类型语言之所以慢，就是因为每一个简单的操作都需要大量的指令才能完成。JIT（即时编译，一种混合了解释器和编译器好处的技术）在字节码执行过程中标识被经常执行的字节码，并将其编译成本地机器码，缓存该结果，当同样的字节码再次被执">
+<meta name="keywords" content="Python,性能优化,PyPy,JIT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python性能优化之PyPy">
+<meta property="og:url" content="http://coder-zhuyu.info/2017/07/27/Python性能优化之PyPy/index.html">
 <meta property="og:site_name" content="coder-zhuyu博客">
-<meta property="og:updated_time" content="2017-07-07T07:00:10.000Z">
+<meta property="og:description" content="Python等动态语言是通过将程序编译成字节码，用虚拟机执行字节码来运行程序的，并不是直接执行的本地机器码，所以解释型动态语言一般会比编译型静态语言执行速度慢。python等动态类型语言之所以慢，就是因为每一个简单的操作都需要大量的指令才能完成。JIT（即时编译，一种混合了解释器和编译器好处的技术）在字节码执行过程中标识被经常执行的字节码，并将其编译成本地机器码，缓存该结果，当同样的字节码再次被执">
+<meta property="og:updated_time" content="2019-01-08T15:06:07.052Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="All tags">
+<meta name="twitter:title" content="Python性能优化之PyPy">
+<meta name="twitter:description" content="Python等动态语言是通过将程序编译成字节码，用虚拟机执行字节码来运行程序的，并不是直接执行的本地机器码，所以解释型动态语言一般会比编译型静态语言执行速度慢。python等动态类型语言之所以慢，就是因为每一个简单的操作都需要大量的指令才能完成。JIT（即时编译，一种混合了解释器和编译器好处的技术）在字节码执行过程中标识被经常执行的字节码，并将其编译成本地机器码，缓存该结果，当同样的字节码再次被执">
 
 
 
@@ -129,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://coder-zhuyu.info/tags/"/>
+  <link rel="canonical" href="http://coder-zhuyu.info/2017/07/27/Python性能优化之PyPy/"/>
 
 
 
 
 
-  <title>All tags | coder-zhuyu博客</title>
+  <title>Python性能优化之PyPy | coder-zhuyu博客</title>
   
 
 
@@ -279,25 +283,216 @@
             
 
   <div id="posts" class="posts-expand">
-  <header class="post-header">
+    
 
-	<h1 class="post-title" itemprop="name headline">All tags</h1>
+  
 
+  
+  
+  
 
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://coder-zhuyu.info/2017/07/27/Python性能优化之PyPy/">
 
-</header>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="coder-zhuyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="coder-zhuyu博客">
+    </span>
 
     
-    
-      <div class="tag-cloud">
-        <div class="tag-cloud-title">
-            目前共计 11 个标签
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python性能优化之PyPy</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-27T17:36:27+08:00">
+                2017-07-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/07/27/Python性能优化之PyPy/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读次数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
         </div>
-        <div class="tag-cloud-tags">
-          <a href="/tags/JIT/" style="font-size: 12px; color: #ccc">JIT</a> <a href="/tags/PyPy/" style="font-size: 12px; color: #ccc">PyPy</a> <a href="/tags/Python/" style="font-size: 30px; color: #111">Python</a> <a href="/tags/https/" style="font-size: 12px; color: #ccc">https</a> <a href="/tags/mysql/" style="font-size: 12px; color: #ccc">mysql</a> <a href="/tags/nginx-源码-systemtap-stap/" style="font-size: 12px; color: #ccc">nginx 源码 systemtap stap</a> <a href="/tags/python-垃圾回收/" style="font-size: 12px; color: #ccc">python 垃圾回收</a> <a href="/tags/性能优化/" style="font-size: 30px; color: #111">性能优化</a> <a href="/tags/火焰图/" style="font-size: 12px; color: #ccc">火焰图</a> <a href="/tags/证书/" style="font-size: 12px; color: #ccc">证书</a>
-        </div>
-      </div>
+      </header>
     
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Python等动态语言是通过将程序编译成字节码，用虚拟机执行字节码来运行程序的，并不是直接执行的本地机器码，所以解释型动态语言一般会比编译型静态语言执行速度慢。<br>python等动态类型语言之所以慢，就是因为每一个简单的操作都需要大量的指令才能完成。JIT（即时编译，一种混合了解释器和编译器好处的技术）在字节码执行过程中标识被经常执行的字节码，并将其编译成本地机器码，缓存该结果，当同样的字节码再次被执行的时候，会执行预编译的机器码，从而提高性能。<br><a href="https://pypy.org/index.html" target="_blank" rel="external">PyPy</a>就是为了提升python性能而设计的，其使用RPython实现的解释器。RPython是Python的子集， 具有静态类型。</p>
+<h2 id="PyPy源码安装"><a href="#PyPy源码安装" class="headerlink" title="PyPy源码安装"></a>PyPy源码安装</h2><p>以ubuntu操作系统为例，<a href="https://pypy.readthedocs.io/en/latest/build.html" target="_blank" rel="external">参加官方文档</a></p>
+<ol>
+<li><p>依赖安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install gcc make libffi-dev pkg-config libz-dev libbz2-dev \</div><div class="line">libsqlite3-dev libncurses-dev libexpat1-dev libssl-dev libgdbm-dev \</div><div class="line">tk-dev libgc-dev python-cffi \</div><div class="line">liblzma-dev libncursesw-dev      <span class="comment"># these two only needed on PyPy3</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>源码下载<br><a href="https://pypy.org/download.html" target="_blank" rel="external">https://pypy.org/download.html</a></p>
+</li>
+<li><p>编译<br>确保有足够的内存，执行编译过程有点漫长。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>。。。<br>编译成功后会生成一个可执行文件pypy-c和一个动态库libpypy-c.so。新建目录/opt/pypy，将源码目录下的如下文件复制到该目录下:</p>
+<ul>
+<li>pypy-c</li>
+<li>libpypy-c.so</li>
+<li>include/</li>
+<li>lib_pypy/</li>
+<li>lib-python/2.7</li>
+<li>site-packages/</li>
+</ul>
+<p>将pypy-c放到PATH所在目录，将动态库放入搜索路径下:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/lib</div><div class="line">$ sudo ln -s /opt/pypy/libpypy-c.so libpypy-c.so</div><div class="line">$ <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/bin</div><div class="line">$ sudo ln -s /opt/pypy/pypy-c pypy</div></pre></td></tr></table></figure></p>
+<h2 id="PyPy使用"><a href="#PyPy使用" class="headerlink" title="PyPy使用"></a>PyPy使用</h2><p>结合虚拟环境使用<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ mkvirtualenv -p /usr/<span class="built_in">local</span>/bin/pypy venv-pypy</div></pre></td></tr></table></figure></p>
+<p>一个Flask框架写的项目<a href="https://github.com/coder-zhuyu/flask-api.git" target="_blank" rel="external">flask-api</a>，压测一个简单数据库查询请求，使用PyPy运行性能提升了一倍左右。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
+          
+            <a href="/tags/PyPy/" rel="tag"># PyPy</a>
+          
+            <a href="/tags/JIT/" rel="tag"># JIT</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/26/Python性能优化之火焰图/" rel="next" title="Python性能优化之火焰图">
+                <i class="fa fa-chevron-left"></i> Python性能优化之火焰图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/23/mysql数据类型选择/" rel="prev" title="mysql数据类型选择">
+                mysql数据类型选择 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -306,6 +501,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
 
         </div>
         
@@ -325,8 +526,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -406,6 +616,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PyPy源码安装"><span class="nav-number">1.</span> <span class="nav-text">PyPy源码安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PyPy使用"><span class="nav-number">2.</span> <span class="nav-text">PyPy使用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -546,10 +772,10 @@
 
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 

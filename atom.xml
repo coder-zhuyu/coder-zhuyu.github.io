@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>zhuyu&#39;s blog</title>
+  <title>coder-zhuyu博客</title>
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
-  <updated>2017-07-06T02:46:38.443Z</updated>
-  <id>http://yoursite.com/</id>
+  <link href="http://coder-zhuyu.info/"/>
+  <updated>2019-01-08T15:06:07.053Z</updated>
+  <id>http://coder-zhuyu.info/</id>
   
   <author>
     <name>coder-zhuyu</name>
@@ -16,22 +16,140 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2017/07/06/hello-world/"/>
-    <id>http://yoursite.com/2017/07/06/hello-world/</id>
-    <published>2017-07-06T02:46:38.450Z</published>
-    <updated>2017-07-06T02:46:38.443Z</updated>
+    <title>systemtap分析nginx一次http请求函数调用过程</title>
+    <link href="http://coder-zhuyu.info/2018/01/01/systemtap%E5%88%86%E6%9E%90nginx%E4%B8%80%E6%AC%A1http%E8%AF%B7%E6%B1%82%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B/"/>
+    <id>http://coder-zhuyu.info/2018/01/01/systemtap分析nginx一次http请求函数调用过程/</id>
+    <published>2018-01-01T14:52:48.000Z</published>
+    <updated>2019-01-08T15:06:07.053Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+      &lt;h2 id=&quot;systemtap-工作原理&quot;&gt;&lt;a href=&quot;#systemtap-工作原理&quot; class=&quot;headerlink&quot; title=&quot;systemtap 工作原理&quot;&gt;&lt;/a&gt;systemtap 工作原理&lt;/h2&gt;&lt;p&gt;systemtap 的核心思想是定义一个事件
     
     </summary>
     
-      <category term="编程" scheme="http://yoursite.com/categories/programming/"/>
+      <category term="nginx" scheme="http://coder-zhuyu.info/categories/nginx/"/>
     
     
-      <category term="随笔" scheme="http://yoursite.com/tags/%E9%9A%8F%E7%AC%94/"/>
+      <category term="nginx 源码 systemtap stap" scheme="http://coder-zhuyu.info/tags/nginx-%E6%BA%90%E7%A0%81-systemtap-stap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python垃圾回收</title>
+    <link href="http://coder-zhuyu.info/2017/10/27/python%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/"/>
+    <id>http://coder-zhuyu.info/2017/10/27/python垃圾回收机制/</id>
+    <published>2017-10-27T12:32:40.000Z</published>
+    <updated>2019-01-08T15:06:07.052Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;python的垃圾回收机制主要是引用计算，同时辅助使用标记-清除解决循环应用，分代回收可以减少垃圾回收扫描的频率。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;引用计数&lt;br&gt;&amp;ensp;&amp;ensp;python默认的垃圾回收机制就是”引用计数”，每个对象维护一个引用计数，当新的引用指向该对
+    
+    </summary>
+    
+      <category term="python" scheme="http://coder-zhuyu.info/categories/python/"/>
+    
+    
+      <category term="python 垃圾回收" scheme="http://coder-zhuyu.info/tags/python-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mysql数据类型选择</title>
+    <link href="http://coder-zhuyu.info/2017/10/23/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E9%80%89%E6%8B%A9/"/>
+    <id>http://coder-zhuyu.info/2017/10/23/mysql数据类型选择/</id>
+    <published>2017-10-23T06:34:48.000Z</published>
+    <updated>2019-01-08T15:06:07.052Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;mysql数据类型很多，选择合适的数据类型对于提高性能大有裨益。概况来说，尽可能选择小而简单的合适的数据类型。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;小而简单&lt;br&gt;可以减小存储空间的消耗，IO的消耗，更利于缓存到内存，同时计算复杂度也会低。&lt;/li&gt;
+&lt;li&gt;尽量避免使用NULL&lt;b
+    
+    </summary>
+    
+      <category term="mysql" scheme="http://coder-zhuyu.info/categories/mysql/"/>
+    
+    
+      <category term="mysql" scheme="http://coder-zhuyu.info/tags/mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python性能优化之PyPy</title>
+    <link href="http://coder-zhuyu.info/2017/07/27/Python%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8BPyPy/"/>
+    <id>http://coder-zhuyu.info/2017/07/27/Python性能优化之PyPy/</id>
+    <published>2017-07-27T09:36:27.000Z</published>
+    <updated>2019-01-08T15:06:07.052Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Python等动态语言是通过将程序编译成字节码，用虚拟机执行字节码来运行程序的，并不是直接执行的本地机器码，所以解释型动态语言一般会比编译型静态语言执行速度慢。&lt;br&gt;python等动态类型语言之所以慢，就是因为每一个简单的操作都需要大量的指令才能完成。JIT（即时编译，一
+    
+    </summary>
+    
+      <category term="Python" scheme="http://coder-zhuyu.info/categories/Python/"/>
+    
+    
+      <category term="Python" scheme="http://coder-zhuyu.info/tags/Python/"/>
+    
+      <category term="性能优化" scheme="http://coder-zhuyu.info/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+      <category term="PyPy" scheme="http://coder-zhuyu.info/tags/PyPy/"/>
+    
+      <category term="JIT" scheme="http://coder-zhuyu.info/tags/JIT/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python性能优化之火焰图</title>
+    <link href="http://coder-zhuyu.info/2017/07/26/Python%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8B%E7%81%AB%E7%84%B0%E5%9B%BE/"/>
+    <id>http://coder-zhuyu.info/2017/07/26/Python性能优化之火焰图/</id>
+    <published>2017-07-26T05:36:25.000Z</published>
+    <updated>2019-01-08T15:19:50.320Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;性能优化首先要知道程序的性能瓶颈在哪里，python已经提供了profile工具可以看出哪些函数耗时较长。本文介绍的&lt;a href=&quot;http://www.brendangregg.com/flamegraphs.html&quot; target=&quot;_blank&quot; rel=&quot;ext
+    
+    </summary>
+    
+      <category term="Python" scheme="http://coder-zhuyu.info/categories/Python/"/>
+    
+    
+      <category term="Python" scheme="http://coder-zhuyu.info/tags/Python/"/>
+    
+      <category term="性能优化" scheme="http://coder-zhuyu.info/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+      <category term="火焰图" scheme="http://coder-zhuyu.info/tags/%E7%81%AB%E7%84%B0%E5%9B%BE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>获取Let&#39;s Encrypt永久免费证书</title>
+    <link href="http://coder-zhuyu.info/2017/07/20/%E8%8E%B7%E5%8F%96Let-s-Encrypt%E6%B0%B8%E4%B9%85%E5%85%8D%E8%B4%B9%E8%AF%81%E4%B9%A6/"/>
+    <id>http://coder-zhuyu.info/2017/07/20/获取Let-s-Encrypt永久免费证书/</id>
+    <published>2017-07-20T07:36:30.000Z</published>
+    <updated>2019-01-08T15:06:07.053Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本文介绍如何使用Let’s Encrypt获取免费证书，以支持https服务。&lt;/p&gt;
+&lt;h2 id=&quot;步骤如下&quot;&gt;&lt;a href=&quot;#步骤如下&quot; class=&quot;headerlink&quot; title=&quot;步骤如下:&quot;&gt;&lt;/a&gt;步骤如下:&lt;/h2&gt;&lt;h3 id=&quot;1-拉取git上
+    
+    </summary>
+    
+      <category term="web" scheme="http://coder-zhuyu.info/categories/web/"/>
+    
+    
+      <category term="https" scheme="http://coder-zhuyu.info/tags/https/"/>
+    
+      <category term="证书" scheme="http://coder-zhuyu.info/tags/%E8%AF%81%E4%B9%A6/"/>
     
   </entry>
   

@@ -1,0 +1,1134 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nginx 源码 systemtap stap," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="coder-zhuyu博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="systemtap 工作原理systemtap 的核心思想是定义一个事件（event），以及给出处理该事件的句柄（Handler）。当一个特定的事件发生时，内核运行该处理句柄，就像快速调用一个子函数一样，处理完之后恢复到内核原始状态。这里有两个概念：  事件（Event）：systemtap 定义了很多种事件，例如进入或退出某个内核函数、定时器时间到、整个systemtap会话启动或退出等等。 句">
+<meta name="keywords" content="nginx 源码 systemtap stap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="systemtap分析nginx一次http请求函数调用过程">
+<meta property="og:url" content="http://coder-zhuyu.info/2018/01/01/systemtap分析nginx一次http请求函数调用过程/index.html">
+<meta property="og:site_name" content="coder-zhuyu博客">
+<meta property="og:description" content="systemtap 工作原理systemtap 的核心思想是定义一个事件（event），以及给出处理该事件的句柄（Handler）。当一个特定的事件发生时，内核运行该处理句柄，就像快速调用一个子函数一样，处理完之后恢复到内核原始状态。这里有两个概念：  事件（Event）：systemtap 定义了很多种事件，例如进入或退出某个内核函数、定时器时间到、整个systemtap会话启动或退出等等。 句">
+<meta property="og:updated_time" content="2019-01-08T15:06:07.053Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="systemtap分析nginx一次http请求函数调用过程">
+<meta name="twitter:description" content="systemtap 工作原理systemtap 的核心思想是定义一个事件（event），以及给出处理该事件的句柄（Handler）。当一个特定的事件发生时，内核运行该处理句柄，就像快速调用一个子函数一样，处理完之后恢复到内核原始状态。这里有两个概念：  事件（Event）：systemtap 定义了很多种事件，例如进入或退出某个内核函数、定时器时间到、整个systemtap会话启动或退出等等。 句">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://coder-zhuyu.info/2018/01/01/systemtap分析nginx一次http请求函数调用过程/"/>
+
+
+
+
+
+  <title>systemtap分析nginx一次http请求函数调用过程 | coder-zhuyu博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">coder-zhuyu博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://coder-zhuyu.info/2018/01/01/systemtap分析nginx一次http请求函数调用过程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="coder-zhuyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="coder-zhuyu博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">systemtap分析nginx一次http请求函数调用过程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-01T22:52:48+08:00">
+                2018-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2018/01/01/systemtap分析nginx一次http请求函数调用过程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读次数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="systemtap-工作原理"><a href="#systemtap-工作原理" class="headerlink" title="systemtap 工作原理"></a>systemtap 工作原理</h2><p>systemtap 的核心思想是定义一个事件（event），以及给出处理该事件的句柄（Handler）。当一个特定的事件发生时，内核运行该处理句柄，就像快速调用一个子函数一样，处理完之后恢复到内核原始状态。这里有两个概念：</p>
+<ul>
+<li>事件（Event）：systemtap 定义了很多种事件，例如进入或退出某个内核函数、定时器时间到、整个systemtap会话启动或退出等等。</li>
+<li>句柄（Handler）：就是一些脚本语句，描述了当事件发生时要完成的工作，通常是从事件的上下文提取数据，将它们存入内部变量中，或者打印出来。</li>
+</ul>
+<p>Systemtap 工作原理是通过将脚本语句翻译成C语句，编译成内核模块。模块加载之后，将所有探测的事件以钩子的方式挂到内核上，当任何处理器上的某个事件发生时，相应钩子上句柄就会被执行。最后，当systemtap会话结束之后，钩子从内核上取下，移除模块。整个过程用一个命令 stap 就可以完成。 上面只是简单的原理，更多背后的机理参考网上资料和相应的论文。 </p>
+<h2 id="分析nginx-http请求处理脚本"><a href="#分析nginx-http请求处理脚本" class="headerlink" title="分析nginx http请求处理脚本"></a>分析nginx http请求处理脚本</h2><p>参见[知乎][1]<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// show_one_req.stap</div><div class="line">probe process(<span class="string">"/usr/local/openresty/nginx/sbin/nginx"</span>).<span class="keyword">function</span>(<span class="string">"ngx_http_*"</span>) &#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%s -&gt; %s\n"</span>, thread_indent(2), probefunc());</div><div class="line">&#125;</div><div class="line"></div><div class="line">probe process(<span class="string">"/usr/local/openresty/nginx/sbin/nginx"</span>).<span class="keyword">function</span>(<span class="string">"ngx_http_*"</span>).<span class="built_in">return</span> &#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%s &lt;- %s\n"</span>, thread_indent(-2), probefunc());</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">stap show_one_req.stap -x NGX_WORKER_PID  -v</div></pre></td></tr></table></figure>
+<h2 id="代码调用过程-比较长"><a href="#代码调用过程-比较长" class="headerlink" title="代码调用过程(比较长)"></a>代码调用过程(比较长)</h2><p>```bash<br>   0 openresty(1551):  -&gt; ngx_http_init_connection<br>  24 openresty(1551):  &lt;- ngx_event_accept<br>   0 openresty(1551):  -&gt; ngx_http_wait_request_handler<br>  10 openresty(1551):    -&gt; ngx_http_create_request<br>  16 openresty(1551):    &lt;- ngx_http_wait_request_handler<br>  18 openresty(1551):    -&gt; ngx_http_process_request_line<br>  23 openresty(1551):      -&gt; ngx_http_read_request_header<br>  27 openresty(1551):      &lt;- ngx_http_process_request_line<br>  30 openresty(1551):      -&gt; ngx_http_parse_request_line<br>  36 openresty(1551):      &lt;- ngx_http_process_request_line<br>  38 openresty(1551):      -&gt; ngx_http_process_request_uri<br>  42 openresty(1551):      &lt;- ngx_http_process_request_line<br>  45 openresty(1551):      -&gt; ngx_http_process_request_headers<br>  50 openresty(1551):        -&gt; ngx_http_read_request_header<br>  54 openresty(1551):        &lt;- ngx_http_process_request_headers<br>  57 openresty(1551):        -&gt; ngx_http_parse_header_line<br>  62 openresty(1551):        &lt;- ngx_http_process_request_headers<br>  65 openresty(1551):        -&gt; ngx_http_process_user_agent<br>  70 openresty(1551):        &lt;- ngx_http_process_request_headers<br>  72 openresty(1551):        -&gt; ngx_http_parse_header_line<br>  76 openresty(1551):        &lt;- ngx_http_process_request_headers<br>  78 openresty(1551):        -&gt; ngx_http_process_host<br>  83 openresty(1551):          -&gt; ngx_http_validate_host<br>  88 openresty(1551):          &lt;- ngx_http_process_host<br>  90 openresty(1551):          -&gt; ngx_http_set_virtual_server<br>  94 openresty(1551):            -&gt; ngx_http_find_virtual_server.isra.2<br>  98 openresty(1551):            &lt;- ngx_http_set_virtual_server<br>  99 openresty(1551):          &lt;- ngx_http_process_host<br> 101 openresty(1551):        &lt;- ngx_http_process_request_headers<br> 103 openresty(1551):        -&gt; ngx_http_parse_header_line<br> 107 openresty(1551):        &lt;- ngx_http_process_request_headers<br> 109 openresty(1551):        -&gt; ngx_http_parse_header_line<br> 113 openresty(1551):        &lt;- ngx_http_process_request_headers<br> 115 openresty(1551):        -&gt; ngx_http_process_request_header<br> 119 openresty(1551):        &lt;- ngx_http_process_request_headers<br> 121 openresty(1551):        -&gt; ngx_http_process_request<br> 126 openresty(1551):          -&gt; ngx_http_handler<br> 131 openresty(1551):            -&gt; ngx_http_core_run_phases<br> 136 openresty(1551):              -&gt; ngx_http_core_generic_phase<br> 164 openresty(1551):                -&gt; ngx_http_realip_handler<br> 169 openresty(1551):                &lt;- ngx_http_core_generic_phase<br> 170 openresty(1551):              &lt;- ngx_http_core_run_phases<br> 173 openresty(1551):              -&gt; ngx_http_core_rewrite_phase<br> 178 openresty(1551):              &lt;- ngx_http_core_run_phases<br> 180 openresty(1551):              -&gt; ngx_http_core_rewrite_phase<br> 185 openresty(1551):                -&gt; ngx_http_rewrite_handler<br> 189 openresty(1551):                &lt;- ngx_http_core_rewrite_phase<br> 191 openresty(1551):              &lt;- ngx_http_core_run_phases<br> 193 openresty(1551):              -&gt; ngx_http_core_find_config_phase<br> 198 openresty(1551):                -&gt; ngx_http_core_find_location<br> 202 openresty(1551):                  -&gt; ngx_http_core_find_location<br> 207 openresty(1551):                    -&gt; ngx_http_core_find_location<br> 211 openresty(1551):                      -&gt; ngx_http_core_find_location<br> 215 openresty(1551):                      &lt;- ngx_http_core_find_location<br> 217 openresty(1551):                    &lt;- ngx_http_core_find_config_phase<br> 219 openresty(1551):                    -&gt; ngx_http_update_location_config<br> 224 openresty(1551):                    &lt;- ngx_http_core_find_config_phase<br> 226 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 228 openresty(1551):                  -&gt; ngx_http_core_rewrite_phase<br> 232 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 234 openresty(1551):                  -&gt; ngx_http_core_rewrite_phase<br> 238 openresty(1551):                    -&gt; ngx_http_rewrite_handler<br> 242 openresty(1551):                    &lt;- ngx_http_core_rewrite_phase<br> 244 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 246 openresty(1551):                  -&gt; ngx_http_core_post_rewrite_phase<br> 250 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 253 openresty(1551):                  -&gt; ngx_http_core_generic_phase<br> 257 openresty(1551):                    -&gt; ngx_http_realip_handler<br> 261 openresty(1551):                    &lt;- ngx_http_core_generic_phase<br> 263 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 265 openresty(1551):                  -&gt; ngx_http_core_generic_phase<br> 270 openresty(1551):                    -&gt; ngx_http_limit_req_handler<br> 276 openresty(1551):                    &lt;- ngx_http_core_generic_phase<br> 277 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 279 openresty(1551):                  -&gt; ngx_http_core_generic_phase<br> 284 openresty(1551):                    -&gt; ngx_http_limit_conn_handler<br> 288 openresty(1551):                    &lt;- ngx_http_core_generic_phase<br> 290 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 292 openresty(1551):                  -&gt; ngx_http_core_access_phase<br> 296 openresty(1551):                    -&gt; ngx_http_access_handler<br> 301 openresty(1551):                    &lt;- ngx_http_core_access_phase<br> 303 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 305 openresty(1551):                  -&gt; ngx_http_core_access_phase<br> 310 openresty(1551):                    -&gt; ngx_http_auth_basic_handler<br> 314 openresty(1551):                    &lt;- ngx_http_core_access_phase<br> 316 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 318 openresty(1551):                  -&gt; ngx_http_core_post_access_phase<br> 322 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 324 openresty(1551):                  -&gt; ngx_http_core_generic_phase<br> 328 openresty(1551):                    -&gt; ngx_http_try_files_handler<br> 333 openresty(1551):                    &lt;- ngx_http_core_generic_phase<br> 335 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 337 openresty(1551):                  -&gt; ngx_http_core_generic_phase<br> 341 openresty(1551):                    -&gt; ngx_http_mirror_handler<br> 346 openresty(1551):                    &lt;- ngx_http_core_generic_phase<br> 347 openresty(1551):                  &lt;- ngx_http_core_run_phases<br> 349 openresty(1551):                  -&gt; ngx_http_core_content_phase<br> 355 openresty(1551):                    -&gt; ngx_http_lua_content_handler<br> 362 openresty(1551):                      -&gt; ngx_http_lua_content_handler<br> 366 openresty(1551):                        -&gt; ngx_http_lua_content_handler<br> 376 openresty(1551):                          -&gt; ngx_http_lua_content_handler_inline<br> 391 openresty(1551):                            -&gt; ngx_http_lua_content_handler_inline<br> 424 openresty(1551):                              -&gt; ngx_http_lua_cache_loadbuffer<br> 488 openresty(1551):                                -&gt; ngx_http_lua_cache_load_code<br> 506 openresty(1551):                                &lt;- ngx_http_lua_cache_loadbuffer<br> 509 openresty(1551):                              &lt;- ngx_http_lua_content_handler_inline<br> 512 openresty(1551):                              -&gt; ngx_http_lua_content_by_chunk<br> 517 openresty(1551):                                -&gt; ngx_http_lua_reset_ctx<br> 523 openresty(1551):                                  -&gt; ngx_http_lua_finalize_threads.isra.2<br> 529 openresty(1551):                                  &lt;- ngx_http_lua_reset_ctx<br> 531 openresty(1551):                                &lt;- ngx_http_lua_content_by_chunk<br> 534 openresty(1551):                                -&gt; ngx_http_lua_new_thread<br> 541 openresty(1551):                                  -&gt; ngx_http_lua_create_new_globals_table<br> 547 openresty(1551):                                  &lt;- ngx_http_lua_new_thread<br> 549 openresty(1551):                                  -&gt; ngx_http_lua_new_thread<br> 554 openresty(1551):                                    -&gt; ngx_http_lua_new_thread<br> 562 openresty(1551):                                    &lt;- ngx_http_lua_content_by_chunk<br> 564 openresty(1551):                                    -&gt; ngx_http_lua_content_by_chunk<br> 568 openresty(1551):                                      -&gt; ngx_http_lua_content_by_chunk<br> 577 openresty(1551):                                        -&gt; ngx_http_cleanup_add<br> 582 openresty(1551):                                        &lt;- ngx_http_lua_content_by_chunk<br> 586 openresty(1551):                                        -&gt; ngx_http_lua_run_thread<br> 592 openresty(1551):                                          -&gt; ngx_http_lua_run_thread<br> 598 openresty(1551):                                            -&gt; ngx_http_lua_pcre_malloc_init<br> 602 openresty(1551):                                            &lt;- ngx_http_lua_run_thread<br> 612 openresty(1551):                                            -&gt; ngx_http_lua_ngx_say<br> 619 openresty(1551):                                              -&gt; ngx_http_lua_ngx_echo<br> 624 openresty(1551):                                                -&gt; ngx_http_lua_ngx_echo<br> 631 openresty(1551):                                                  -&gt; ngx_http_lua_chain_get_free_buf<br> 637 openresty(1551):                                                  &lt;- ngx_http_lua_ngx_echo<br> 643 openresty(1551):                                                  -&gt; ngx_http_lua_send_chain_link<br> 648 openresty(1551):                                                    -&gt; ngx_http_lua_send_header_if_needed<br> 653 openresty(1551):                                                      -&gt; ngx_http_lua_send_header_if_needed<br> 658 openresty(1551):                                                        -&gt; ngx_http_set_content_type<br> 663 openresty(1551):                                                        &lt;- ngx_http_lua_send_header_if_needed<br> 665 openresty(1551):                                                        -&gt; ngx_http_send_header<br> 671 openresty(1551):                                                          -&gt; ngx_http_not_modified_header_filter<br> 677 openresty(1551):                                                            -&gt; ngx_http_lua_capture_header_filter<br> 683 openresty(1551):                                                              -&gt; ngx_http_headers_filter<br> 689 openresty(1551):                                                                -&gt; ngx_http_userid_filter<br> 697 openresty(1551):                                                                  -&gt; ngx_http_charset_header_filter<br> 702 openresty(1551):                                                                    -&gt; ngx_http_charset_header_filter<br> 708 openresty(1551):                                                                      -&gt; ngx_http_ssi_header_filter<br> 714 openresty(1551):                                                                        -&gt; ngx_http_gzip_header_filter<br> 720 openresty(1551):                                                                          -&gt; ngx_http_range_header_filter<br> 725 openresty(1551):                                                                            -&gt; ngx_http_chunked_header_filter<br> 731 openresty(1551):                                                                              -&gt; ngx_http_header_filter<br> 741 openresty(1551):                                                                                -&gt; ngx_http_write_filter<br> 746 openresty(1551):                                                                                &lt;- ngx_http_header_filter<br> 748 openresty(1551):                                                                              &lt;- ngx_http_charset_header_filter<br> 750 openresty(1551):                                                                            &lt;- ngx_http_charset_header_filter<br> 752 openresty(1551):                                                                          &lt;- ngx_http_charset_header_filter<br> 754 openresty(1551):                                                                        &lt;- ngx_http_charset_header_filter<br> 757 openresty(1551):                                                                      &lt;- ngx_http_charset_header_filter<br> 759 openresty(1551):                                                                    &lt;- ngx_http_userid_filter<br> 762 openresty(1551):                                                                  &lt;- ngx_http_headers_filter<br> 764 openresty(1551):                                                                &lt;- ngx_http_lua_send_header_if_needed<br> 766 openresty(1551):                                                              &lt;- ngx_http_lua_send_header_if_needed<br> 769 openresty(1551):                                                            &lt;- ngx_http_lua_send_header_if_needed<br> 771 openresty(1551):                                                          &lt;- ngx_http_lua_send_header_if_needed<br> 773 openresty(1551):                                                        &lt;- ngx_http_lua_send_chain_link<br> 780 openresty(1551):                                                        -&gt; ngx_http_lua_output_filter<br> 787 openresty(1551):                                                          -&gt; ngx_http_output_filter<br> 794 openresty(1551):                                                            -&gt; ngx_http_range_body_filter<br> 801 openresty(1551):                                                              -&gt; ngx_http_copy_filter<br> 807 openresty(1551):                                                                -&gt; ngx_http_lua_capture_body_filter<br> 816 openresty(1551):                                                                  -&gt; ngx_http_trailers_filter<br> 824 openresty(1551):                                                                    -&gt; ngx_http_charset_body_filter<br> 832 openresty(1551):                                                                      -&gt; ngx_http_ssi_body_filter<br> 841 openresty(1551):                                                                        -&gt; ngx_http_postpone_filter<br> 850 openresty(1551):                                                                          -&gt; ngx_http_gzip_body_filter<br> 856 openresty(1551):                                                                            -&gt; ngx_http_chunked_body_filter<br> 867 openresty(1551):                                                                              -&gt; ngx_http_write_filter<br> 873 openresty(1551):                                                                              &lt;- ngx_http_chunked_body_filter<br> 876 openresty(1551):                                                                            &lt;- ngx_http_gzip_body_filter<br> 878 openresty(1551):                                                                          &lt;- ngx_http_ssi_body_filter<br> 880 openresty(1551):                                                                        &lt;- ngx_http_ssi_body_filter<br> 883 openresty(1551):                                                                      &lt;- ngx_http_charset_body_filter<br> 885 openresty(1551):                                                                    &lt;- ngx_http_trailers_filter<br> 887 openresty(1551):                                                                  &lt;- ngx_http_lua_capture_body_filter<br> 890 openresty(1551):                                                                &lt;- ngx_output_chain<br> 894 openresty(1551):                                                              &lt;- ngx_http_output_filter<br>2142 openresty(1551):                                                            &lt;- ngx_http_output_filter<br>2189 openresty(1551):                                                          &lt;- ngx_http_lua_output_filter<br>2203 openresty(1551):                                                        &lt;- ngx_http_lua_ngx_echo<br>2207 openresty(1551):                                                      &lt;- ngx_http_lua_ngx_echo<br>2219 openresty(1551):                                                    &lt;- 0x7f93c6d1f6ea<br>2222 openresty(1551):                                                  &lt;- 0x7f93c6d1f6ea<br>2232 openresty(1551):                                                  -&gt; ngx_http_lua_pcre_malloc_done<br>2312 openresty(1551):                                                  &lt;- ngx_http_lua_run_thread<br>2325 openresty(1551):                                                  -&gt; ngx_http_lua_run_thread<br>2334 openresty(1551):                                                    -&gt; ngx_http_lua_run_thread<br>2339 openresty(1551):                                                      -&gt; ngx_http_lua_del_thread.part.9<br>2354 openresty(1551):                                                      &lt;- ngx_http_lua_run_thread<br>2359 openresty(1551):                                                      -&gt; ngx_http_lua_send_chain_link<br>2365 openresty(1551):                                                        -&gt; ngx_http_lua_send_header_if_needed<br>2369 openresty(1551):                                                        &lt;- ngx_http_lua_send_chain_link<br>2376 openresty(1551):                                                        -&gt; ngx_http_discard_request_body<br>2383 openresty(1551):                                                          -&gt; ngx_http_test_expect<br>2387 openresty(1551):                                                          &lt;- ngx_http_discard_request_body<br>2389 openresty(1551):                                                        &lt;- ngx_http_lua_send_chain_link<br>2392 openresty(1551):                                                        -&gt; ngx_http_lua_send_chain_link<br>2399 openresty(1551):                                                          -&gt; ngx_http_send_special<br>2466 openresty(1551):                                                            -&gt; ngx_http_output_filter<br>2478 openresty(1551):                                                              -&gt; ngx_http_range_body_filter<br>2487 openresty(1551):                                                                -&gt; ngx_http_copy_filter<br>2495 openresty(1551):                                                                  -&gt; ngx_http_lua_capture_body_filter<br>2502 openresty(1551):                                                                    -&gt; ngx_http_trailers_filter<br>2508 openresty(1551):                                                                      -&gt; ngx_http_charset_body_filter<br>2515 openresty(1551):                                                                        -&gt; ngx_http_ssi_body_filter<br>2522 openresty(1551):                                                                          -&gt; ngx_http_postpone_filter<br>2527 openresty(1551):                                                                            -&gt; ngx_http_gzip_body_filter<br>2533 openresty(1551):                                                                              -&gt; ngx_http_chunked_body_filter<br>2539 openresty(1551):                                                                                -&gt; ngx_http_chunked_body_filter<br>2544 openresty(1551):                                                                                  -&gt; ngx_http_write_filter<br>2722 openresty(1551):                                                                                  &lt;- ngx_http_chunked_body_filter<br>2727 openresty(1551):                                                                                &lt;- ngx_http_gzip_body_filter<br>2731 openresty(1551):                                                                              &lt;- ngx_http_ssi_body_filter<br>2732 openresty(1551):                                                                            &lt;- ngx_http_ssi_body_filter<br>2737 openresty(1551):                                                                          &lt;- ngx_http_charset_body_filter<br>2740 openresty(1551):                                                                        &lt;- ngx_http_trailers_filter<br>2743 openresty(1551):                                                                      &lt;- ngx_http_lua_capture_body_filter<br>2746 openresty(1551):                                                                    &lt;- ngx_output_chain<br>2753 openresty(1551):                                                                  &lt;- ngx_http_output_filter<br>2755 openresty(1551):                                                                &lt;- ngx_http_output_filter<br>2757 openresty(1551):                                                              &lt;- ngx_http_send_special<br>2761 openresty(1551):                                                            &lt;- ngx_http_lua_send_chain_link<br>2765 openresty(1551):                                                          &lt;- ngx_http_lua_run_thread<br>2770 openresty(1551):                                                        &lt;- ngx_http_lua_content_by_chunk<br>2776 openresty(1551):                                                      &lt;- ngx_http_lua_content_handler<br>2778 openresty(1551):                                                    &lt;- ngx_http_lua_content_handler<br>2782 openresty(1551):                                                  &lt;- ngx_http_core_content_phase<br>2786 openresty(1551):                                                  -&gt; ngx_http_finalize_request<br>2796 openresty(1551):                                                    -&gt; ngx_http_post_action<br>2803 openresty(1551):                                                    &lt;- ngx_http_finalize_request<br>2806 openresty(1551):                                                    -&gt; ngx_http_finalize_connection<br>2811 openresty(1551):                                                      -&gt; ngx_http_finalize_connection<br>2817 openresty(1551):                                                        -&gt; ngx_http_free_request<br>2823 openresty(1551):                                                          -&gt; ngx_http_lua_request_cleanup_handler<br>2829 openresty(1551):                                                            -&gt; ngx_http_lua_request_cleanup<br>2836 openresty(1551):                                                              -&gt; ngx_http_lua_request_cleanup<br>2842 openresty(1551):                                                                -&gt; ngx_http_lua_finalize_threads.isra.2<br>2848 openresty(1551):                                                                &lt;- ngx_http_free_request<br>2850 openresty(1551):                                                              &lt;- ngx_http_free_request<br>2852 openresty(1551):                                                            &lt;- ngx_http_free_request<br>2855 openresty(1551):                                                            -&gt; ngx_http_log_request<br>2864 openresty(1551):                                                              -&gt; ngx_http_log_handler<br>2874 openresty(1551):                                                                -&gt; ngx_http_script_flush_no_cacheable_variables<br>2879 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>2882 openresty(1551):                                                                -&gt; ngx_http_log_variable_getlen<br>2915 openresty(1551):                                                                  -&gt; ngx_http_get_indexed_variable<br>2953 openresty(1551):                                                                    -&gt; ngx_http_variable_remote_addr<br>2960 openresty(1551):                                                                    &lt;- ngx_http_get_indexed_variable<br>2962 openresty(1551):                                                                  &lt;- ngx_http_log_variable_getlen<br>2965 openresty(1551):                                                                  -&gt; ngx_http_log_escape.isra.1<br>2969 openresty(1551):                                                                  &lt;- ngx_http_log_variable_getlen<br>2971 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>2973 openresty(1551):                                                                -&gt; ngx_http_log_variable_getlen<br>2977 openresty(1551):                                                                  -&gt; ngx_http_get_indexed_variable<br>2982 openresty(1551):                                                                    -&gt; ngx_http_variable_remote_user<br>2988 openresty(1551):                                                                      -&gt; ngx_http_auth_basic_user<br>2994 openresty(1551):                                                                      &lt;- ngx_http_variable_remote_user<br>2996 openresty(1551):                                                                    &lt;- ngx_http_get_indexed_variable<br>2997 openresty(1551):                                                                  &lt;- ngx_http_log_variable_getlen<br>2999 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3001 openresty(1551):                                                                -&gt; ngx_http_log_variable_getlen<br>3005 openresty(1551):                                                                  -&gt; ngx_http_get_indexed_variable<br>3010 openresty(1551):                                                                    -&gt; ngx_http_variable_request_line<br>3016 openresty(1551):                                                                    &lt;- ngx_http_get_indexed_variable<br>3018 openresty(1551):                                                                  &lt;- ngx_http_log_variable_getlen<br>3019 openresty(1551):                                                                  -&gt; ngx_http_log_escape.isra.1<br>3024 openresty(1551):                                                                  &lt;- ngx_http_log_variable_getlen<br>3026 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3027 openresty(1551):                                                                -&gt; ngx_http_log_variable_getlen<br>3031 openresty(1551):                                                                  -&gt; ngx_http_get_indexed_variable<br>3036 openresty(1551):                                                                    -&gt; ngx_http_variable_header<br>3040 openresty(1551):                                                                    &lt;- ngx_http_get_indexed_variable<br>3042 openresty(1551):                                                                  &lt;- ngx_http_log_variable_getlen<br>3043 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3045 openresty(1551):                                                                -&gt; ngx_http_log_variable_getlen<br>3049 openresty(1551):                                                                  -&gt; ngx_http_get_indexed_variable<br>3054 openresty(1551):                                                                    -&gt; ngx_http_variable_header<br>3058 openresty(1551):                                                                    &lt;- ngx_http_get_indexed_variable<br>3059 openresty(1551):                                                                  &lt;- ngx_http_log_variable_getlen<br>3062 openresty(1551):                                                                  -&gt; ngx_http_log_escape.isra.1<br>3066 openresty(1551):                                                                  &lt;- ngx_http_log_variable_getlen<br>3067 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3070 openresty(1551):                                                                -&gt; ngx_http_log_variable<br>3074 openresty(1551):                                                                  -&gt; ngx_http_get_indexed_variable<br>3078 openresty(1551):                                                                  &lt;- ngx_http_log_variable<br>3081 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3084 openresty(1551):                                                                -&gt; ngx_http_log_copy_short<br>3088 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3090 openresty(1551):                                                                -&gt; ngx_http_log_variable<br>3094 openresty(1551):                                                                  -&gt; ngx_http_get_indexed_variable<br>3098 openresty(1551):                                                                  &lt;- ngx_http_log_variable<br>3100 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3102 openresty(1551):                                                                -&gt; ngx_http_log_copy_short<br>3106 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3108 openresty(1551):                                                                -&gt; ngx_http_log_time<br>3113 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3114 openresty(1551):                                                                -&gt; ngx_http_log_copy_short<br>3118 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3120 openresty(1551):                                                                -&gt; ngx_http_log_variable<br>3124 openresty(1551):                                                                  -&gt; ngx_http_get_indexed_variable<br>3128 openresty(1551):                                                                  &lt;- ngx_http_log_variable<br>3130 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3132 openresty(1551):                                                                -&gt; ngx_http_log_copy_short<br>3136 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3137 openresty(1551):                                                                -&gt; ngx_http_log_status<br>3143 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3145 openresty(1551):                                                                -&gt; ngx_http_log_copy_short<br>3149 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3151 openresty(1551):                                                                -&gt; ngx_http_log_body_bytes_sent<br>3155 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3157 openresty(1551):                                                                -&gt; ngx_http_log_copy_short<br>3161 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3163 openresty(1551):                                                                -&gt; ngx_http_log_variable<br>3167 openresty(1551):                                                                  -&gt; ngx_http_get_indexed_variable<br>3171 openresty(1551):                                                                  &lt;- ngx_http_log_variable<br>3173 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3174 openresty(1551):                                                                -&gt; ngx_http_log_copy_short<br>3178 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3180 openresty(1551):                                                                -&gt; ngx_http_log_variable<br>3184 openresty(1551):                                                                  -&gt; ngx_http_get_indexed_variable<br>3189 openresty(1551):                                                                  &lt;- ngx_http_log_variable<br>3190 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3192 openresty(1551):                                                                -&gt; ngx_http_log_copy_short<br>3196 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3198 openresty(1551):                                                                -&gt; ngx_http_log_write<br>3238 openresty(1551):                                                                &lt;- ngx_http_log_handler<br>3241 openresty(1551):                                                              &lt;- ngx_http_log_request<br>3243 openresty(1551):                                                            &lt;- ngx_http_free_request<br>3249 openresty(1551):                                                          &lt;- ngx_http_finalize_connection<br>3255 openresty(1551):                                                        &lt;- ngx_http_core_content_phase<br>3256 openresty(1551):                                                      &lt;- ngx_http_core_content_phase<br>3259 openresty(1551):                                                    &lt;- ngx_http_core_run_phases<br>3263 openresty(1551):                                                  &lt;- ngx_http_process_request<br>3264 openresty(1551):                                                &lt;- ngx_http_process_request<br>3267 openresty(1551):                                                -&gt; ngx_http_run_posted_requests<br>3272 openresty(1551):                                                &lt;- ngx_http_process_request_line<br>3274 openresty(1551):                                              &lt;- ngx_http_process_request_line<br>3276 openresty(1551):                                            &lt;- ngx_http_process_request_line<br>3278 openresty(1551):                                          &lt;- ngx_epoll_process_events<br>3280 openresty(1551):                                        &lt;- ngx_epoll_process_events<br>4536 openresty(1551):                                        -&gt; ngx_http_keepalive_handler<br>4557 openresty(1551):                                          -&gt; ngx_http_close_connection<br>4648 openresty(1551):                                          &lt;- ngx_epoll_process_events<br>4651 openresty(1551):                                        &lt;- ngx_epoll_process_events</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nginx-源码-systemtap-stap/" rel="tag"># nginx 源码 systemtap stap</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/27/python垃圾回收机制/" rel="next" title="python垃圾回收">
+                <i class="fa fa-chevron-left"></i> python垃圾回收
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="coder-zhuyu" />
+          <p class="site-author-name" itemprop="name">coder-zhuyu</p>
+           
+              <p class="site-description motion-element" itemprop="description">路漫漫其修远兮</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/coder-zhuyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#systemtap-工作原理"><span class="nav-number">1.</span> <span class="nav-text">systemtap 工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析nginx-http请求处理脚本"><span class="nav-number">2.</span> <span class="nav-text">分析nginx http请求处理脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码调用过程-比较长"><span class="nav-number">3.</span> <span class="nav-text">代码调用过程(比较长)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coder-zhuyu</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "fc1dac925c8e4c88b2747f847d2f2de0",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
