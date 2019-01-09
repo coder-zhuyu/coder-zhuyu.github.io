@@ -11,4 +11,4 @@ Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
 
-Sitemap: https://coder-zhuyu.info/sitemap.xml
+Sitemap: https://coder-zhuyu.github.io/sitemap.xml

@@ -102,12 +102,12 @@
 <meta property="og:url" content="http://coder-zhuyu.info/2017/07/26/Python性能优化之火焰图/index.html">
 <meta property="og:site_name" content="coder-zhuyu博客">
 <meta property="og:description" content="性能优化首先要知道程序的性能瓶颈在哪里，python已经提供了profile工具可以看出哪些函数耗时较长。本文介绍的火焰图会以图的形式给出程序更直观的函数调用及开销，这里将介绍的是Uber开源的python火焰图工具pyflame。 首先给出一个直观的火焰图可以很形象的看出函数调用耗时情况，横向越宽说明耗时越长，从下往上看，最下面表示程序从开始到结束总的耗时。从下往上是一级级函数的调用情况。 py">
-<meta property="og:image" content="http://47.98.200.161/images/blog/flame.svg">
-<meta property="og:updated_time" content="2019-01-08T15:19:50.320Z">
+<meta property="og:image" content="https://github.com/coder-zhuyu/images/blob/master/blog/flame.svg">
+<meta property="og:updated_time" content="2019-01-09T04:29:15.745Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python性能优化之火焰图">
 <meta name="twitter:description" content="性能优化首先要知道程序的性能瓶颈在哪里，python已经提供了profile工具可以看出哪些函数耗时较长。本文介绍的火焰图会以图的形式给出程序更直观的函数调用及开销，这里将介绍的是Uber开源的python火焰图工具pyflame。 首先给出一个直观的火焰图可以很形象的看出函数调用耗时情况，横向越宽说明耗时越长，从下往上看，最下面表示程序从开始到结束总的耗时。从下往上是一级级函数的调用情况。 py">
-<meta name="twitter:image" content="http://47.98.200.161/images/blog/flame.svg">
+<meta name="twitter:image" content="https://github.com/coder-zhuyu/images/blob/master/blog/flame.svg">
 
 
 
@@ -396,7 +396,7 @@
 
       
         <p>性能优化首先要知道程序的性能瓶颈在哪里，python已经提供了profile工具可以看出哪些函数耗时较长。本文介绍的<a href="http://www.brendangregg.com/flamegraphs.html" target="_blank" rel="external">火焰图</a>会以图的形式给出程序更直观的函数调用及开销，这里将介绍的是Uber开源的python火焰图工具<a href="https://github.com/uber/pyflame" target="_blank" rel="external">pyflame</a>。</p>
-<h2 id="首先给出一个直观的火焰图"><a href="#首先给出一个直观的火焰图" class="headerlink" title="首先给出一个直观的火焰图"></a>首先给出一个直观的火焰图</h2><p><img src="http://47.98.200.161/images/blog/flame.svg" alt="火焰图示例"><br>可以很形象的看出函数调用耗时情况，横向越宽说明耗时越长，从下往上看，最下面表示程序从开始到结束总的耗时。从下往上是一级级函数的调用情况。</p>
+<h2 id="首先给出一个直观的火焰图"><a href="#首先给出一个直观的火焰图" class="headerlink" title="首先给出一个直观的火焰图"></a>首先给出一个直观的火焰图</h2><p><img src="https://github.com/coder-zhuyu/images/blob/master/blog/flame.svg" alt="火焰图示例"><br>可以很形象的看出函数调用耗时情况，横向越宽说明耗时越长，从下往上看，最下面表示程序从开始到结束总的耗时。从下往上是一级级函数的调用情况。</p>
 <h2 id="pyflame安装-以ubuntu为例"><a href="#pyflame安装-以ubuntu为例" class="headerlink" title="pyflame安装(以ubuntu为例)"></a>pyflame安装(以ubuntu为例)</h2><p>对Debian/Ubuntu/Fedora系统支持的比较好，<a href="http://blog.motitan.com/2017/04/15/python%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7%E4%B9%8Bpyflame" target="_blank" rel="external">centos6参考</a>。</p>
 <ol>
 <li>依赖安装<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install autoconf automake autotools-dev g++ pkg-config python-dev python3-dev libtool make</div></pre></td></tr></table></figure>
@@ -559,7 +559,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -570,7 +570,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
