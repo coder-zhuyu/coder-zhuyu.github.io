@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Python,性能优化,PyPy,JIT," />
+  <meta name="keywords" content="OpenResty Nginx," />
 
 
 
@@ -95,17 +95,19 @@
 
 
 
-<meta name="description" content="Python等动态语言是通过将程序编译成字节码，用虚拟机执行字节码来运行程序的，并不是直接执行的本地机器码，所以解释型动态语言一般会比编译型静态语言执行速度慢。python等动态类型语言之所以慢，就是因为每一个简单的操作都需要大量的指令才能完成。JIT（即时编译，一种混合了解释器和编译器好处的技术）在字节码执行过程中标识被经常执行的字节码，并将其编译成本地机器码，缓存该结果，当同样的字节码再次被执">
-<meta name="keywords" content="Python,性能优化,PyPy,JIT">
+<meta name="description" content="OpenResty介绍 Nginx的非阻塞网络模型，高并发、高性能 Lua脚本语言的灵活、小巧、高效 Lua协程与Nginx非阻塞网络模型融合，以同步的方式写非阻塞代码 OpenResty生态日趋完善，大量应用在高并发场景下，大量优秀的模块 参考 https://openresty.org/en/download.html http://nginx.org/en/docs/ http://luaj">
+<meta name="keywords" content="OpenResty Nginx">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python性能优化之PyPy">
-<meta property="og:url" content="http://coder-zhuyu.info/2017/07/27/Python性能优化之PyPy/index.html">
+<meta property="og:title" content="OpenResty入门">
+<meta property="og:url" content="http://coder-zhuyu.info/2016/09/28/OpenResty入门/index.html">
 <meta property="og:site_name" content="coder-zhuyu博客">
-<meta property="og:description" content="Python等动态语言是通过将程序编译成字节码，用虚拟机执行字节码来运行程序的，并不是直接执行的本地机器码，所以解释型动态语言一般会比编译型静态语言执行速度慢。python等动态类型语言之所以慢，就是因为每一个简单的操作都需要大量的指令才能完成。JIT（即时编译，一种混合了解释器和编译器好处的技术）在字节码执行过程中标识被经常执行的字节码，并将其编译成本地机器码，缓存该结果，当同样的字节码再次被执">
-<meta property="og:updated_time" content="2019-01-08T15:06:07.052Z">
+<meta property="og:description" content="OpenResty介绍 Nginx的非阻塞网络模型，高并发、高性能 Lua脚本语言的灵活、小巧、高效 Lua协程与Nginx非阻塞网络模型融合，以同步的方式写非阻塞代码 OpenResty生态日趋完善，大量应用在高并发场景下，大量优秀的模块 参考 https://openresty.org/en/download.html http://nginx.org/en/docs/ http://luaj">
+<meta property="og:image" content="https://coder-zhuyu.github.io/images/blog/png-OpenResty-by-StuQ.png">
+<meta property="og:updated_time" content="2019-01-16T14:44:37.789Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python性能优化之PyPy">
-<meta name="twitter:description" content="Python等动态语言是通过将程序编译成字节码，用虚拟机执行字节码来运行程序的，并不是直接执行的本地机器码，所以解释型动态语言一般会比编译型静态语言执行速度慢。python等动态类型语言之所以慢，就是因为每一个简单的操作都需要大量的指令才能完成。JIT（即时编译，一种混合了解释器和编译器好处的技术）在字节码执行过程中标识被经常执行的字节码，并将其编译成本地机器码，缓存该结果，当同样的字节码再次被执">
+<meta name="twitter:title" content="OpenResty入门">
+<meta name="twitter:description" content="OpenResty介绍 Nginx的非阻塞网络模型，高并发、高性能 Lua脚本语言的灵活、小巧、高效 Lua协程与Nginx非阻塞网络模型融合，以同步的方式写非阻塞代码 OpenResty生态日趋完善，大量应用在高并发场景下，大量优秀的模块 参考 https://openresty.org/en/download.html http://nginx.org/en/docs/ http://luaj">
+<meta name="twitter:image" content="https://coder-zhuyu.github.io/images/blog/png-OpenResty-by-StuQ.png">
 
 
 
@@ -133,13 +135,13 @@
 
 
 
-  <link rel="canonical" href="http://coder-zhuyu.info/2017/07/27/Python性能优化之PyPy/"/>
+  <link rel="canonical" href="http://coder-zhuyu.info/2016/09/28/OpenResty入门/"/>
 
 
 
 
 
-  <title>Python性能优化之PyPy | coder-zhuyu博客</title>
+  <title>OpenResty入门 | coder-zhuyu博客</title>
   
 
 
@@ -292,7 +294,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://coder-zhuyu.info/2017/07/27/Python性能优化之PyPy/">
+    <link itemprop="mainEntityOfPage" href="http://coder-zhuyu.info/2016/09/28/OpenResty入门/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="coder-zhuyu">
@@ -309,7 +311,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python性能优化之PyPy</h1>
+          <h1 class="post-title" itemprop="name headline">OpenResty入门</h1>
         
 
         <div class="post-meta">
@@ -321,8 +323,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-27T17:36:27+08:00">
-                2017-07-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-28T21:35:47+08:00">
+                2016-09-28
               </time>
             
 
@@ -344,8 +346,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/categories/OpenResty/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenResty</span>
                   </a>
                 </span>
 
@@ -362,7 +364,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a class="cloud-tie-join-count" href="/2017/07/27/Python性能优化之PyPy/#comments" itemprop="discussionUrl">
+                <a class="cloud-tie-join-count" href="/2016/09/28/OpenResty入门/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count join-count" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -393,30 +395,44 @@
       
 
       
-        <p>Python等动态语言是通过将程序编译成字节码，用虚拟机执行字节码来运行程序的，并不是直接执行的本地机器码，所以解释型动态语言一般会比编译型静态语言执行速度慢。<br>python等动态类型语言之所以慢，就是因为每一个简单的操作都需要大量的指令才能完成。JIT（即时编译，一种混合了解释器和编译器好处的技术）在字节码执行过程中标识被经常执行的字节码，并将其编译成本地机器码，缓存该结果，当同样的字节码再次被执行的时候，会执行预编译的机器码，从而提高性能。<br><a href="https://pypy.org/index.html" target="_blank" rel="external">PyPy</a>就是为了提升python性能而设计的，其使用RPython实现的解释器。RPython是Python的子集， 具有静态类型。</p>
-<h2 id="PyPy源码安装"><a href="#PyPy源码安装" class="headerlink" title="PyPy源码安装"></a>PyPy源码安装</h2><p>以ubuntu操作系统为例，<a href="https://pypy.readthedocs.io/en/latest/build.html" target="_blank" rel="external">参加官方文档</a></p>
-<ol>
+        <h2 id="OpenResty介绍"><a href="#OpenResty介绍" class="headerlink" title="OpenResty介绍"></a>OpenResty介绍</h2><ul>
+<li>Nginx的非阻塞网络模型，高并发、高性能</li>
+<li>Lua脚本语言的灵活、小巧、高效</li>
+<li>Lua协程与Nginx非阻塞网络模型融合，以同步的方式写非阻塞代码</li>
+<li>OpenResty生态日趋完善，大量应用在高并发场景下，大量优秀的模块</li>
+<li>参考<ul>
+<li><a href="https://openresty.org/en/download.html" target="_blank" rel="external">https://openresty.org/en/download.html</a></li>
+<li><a href="http://nginx.org/en/docs/" target="_blank" rel="external">http://nginx.org/en/docs/</a></li>
+<li><a href="http://luajit.org/index.html" target="_blank" rel="external">http://luajit.org/index.html</a></li>
+<li><a href="http://www.lua.org/manual/5.1/" target="_blank" rel="external">http://www.lua.org/manual/5.1/</a></li>
+<li><a href="https://www.gitbook.com/book/moonbingbing/openresty-best-practices/details(最佳实践" target="_blank" rel="external">https://www.gitbook.com/book/moonbingbing/openresty-best-practices/details(最佳实践</a>)</li>
+<li><a href="https://github.com/openresty/lua-nginx-module" target="_blank" rel="external">https://github.com/openresty/lua-nginx-module</a></li>
+<li><a href="https://github.com/Iresty/nginx-lua-module-zh-wiki(上一官方文档中文翻译" target="_blank" rel="external">https://github.com/Iresty/nginx-lua-module-zh-wiki(上一官方文档中文翻译</a>)</li>
+<li><a href="https://github.com/bungle/awesome-resty(相关资源整理汇总" target="_blank" rel="external">https://github.com/bungle/awesome-resty(相关资源整理汇总</a>)</li>
+</ul>
+</li>
+</ul>
+<h2 id="安装配置命令-ubuntu"><a href="#安装配置命令-ubuntu" class="headerlink" title="安装配置命令(ubuntu)"></a>安装配置命令(ubuntu)</h2><h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><ol>
 <li><p>依赖安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install gcc make libffi-dev pkg-config libz-dev libbz2-dev \</div><div class="line">libsqlite3-dev libncurses-dev libexpat1-dev libssl-dev libgdbm-dev \</div><div class="line">tk-dev libgc-dev python-cffi \</div><div class="line">liblzma-dev libncursesw-dev      <span class="comment"># these two only needed on PyPy3</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install libreadline-dev libncurses5-dev libpcre3-dev ibssl-dev perl make build-essential</div></pre></td></tr></table></figure>
 </li>
-<li><p>源码下载<br><a href="https://pypy.org/download.html" target="_blank" rel="external">https://pypy.org/download.html</a></p>
+<li><p>源码解压</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar zxvf openresty-version.tar.gz &amp;&amp; <span class="built_in">cd</span> openresty-version/</div></pre></td></tr></table></figure>
 </li>
-<li><p>编译<br>确保有足够的内存，执行编译过程有点漫长。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make</div></pre></td></tr></table></figure>
+<li><p>configure</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=/opt/openresty --with-luajit --withhttp_iconv_module -j2</div></pre></td></tr></table></figure>
+</li>
+<li><p>编译</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make -j2</div></pre></td></tr></table></figure>
+</li>
+<li><p>安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo make install</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>。。。<br>编译成功后会生成一个可执行文件pypy-c和一个动态库libpypy-c.so。新建目录/opt/pypy，将源码目录下的如下文件复制到该目录下:</p>
-<ul>
-<li>pypy-c</li>
-<li>libpypy-c.so</li>
-<li>include/</li>
-<li>lib_pypy/</li>
-<li>lib-python/2.7</li>
-<li>site-packages/</li>
-</ul>
-<p>将pypy-c放到PATH所在目录，将动态库放入搜索路径下:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/lib</div><div class="line">$ sudo ln -s /opt/pypy/libpypy-c.so libpypy-c.so</div><div class="line">$ <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/bin</div><div class="line">$ sudo ln -s /opt/pypy/pypy-c pypy</div></pre></td></tr></table></figure></p>
-<h2 id="PyPy使用"><a href="#PyPy使用" class="headerlink" title="PyPy使用"></a>PyPy使用</h2><p>结合虚拟环境使用<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ mkvirtualenv -p /usr/<span class="built_in">local</span>/bin/pypy venv-pypy</div></pre></td></tr></table></figure></p>
-<p>一个Flask框架写的项目<a href="https://github.com/coder-zhuyu/flask-api.git" target="_blank" rel="external">flask-api</a>，压测一个简单数据库查询请求，使用PyPy运行性能提升了一倍左右。</p>
+<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">./configure --<span class="built_in">help</span>      <span class="comment"># 查看安装配置参数</span></div><div class="line">nginx                   <span class="comment"># 启动</span></div><div class="line">nginx -p /opt/openresty/nginx   <span class="comment"># 指定启动prefix路径</span></div><div class="line">nginx -c /opt/openresty/nginx/conf/nginx.conf       <span class="comment"># 指定启动配置文件</span></div><div class="line">nginx -t                <span class="comment"># 检查nginx.conf配置文件里的配置项合法否</span></div><div class="line">nginx -V                <span class="comment"># 查看版本及编译进去的模块</span></div><div class="line">nginx -s stop           <span class="comment"># 强制退出</span></div><div class="line">nginx -s quit           <span class="comment"># 优雅退出</span></div><div class="line">nginx -s reload         <span class="comment"># 重新加载配置文件 优雅重启</span></div><div class="line">nginx -s reopen         <span class="comment"># 重新打开日志文件, 用于切换日志</span></div></pre></td></tr></table></figure>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">user</span>  resty;    <span class="comment"># worker进程运行用户 涉及到权限</span></div><div class="line"><span class="attribute">worker_processes</span>  auto;     <span class="comment"># worker进程数为cpu核数</span></div><div class="line"><span class="attribute">worker_cpu_affinity</span> auto;   <span class="comment"># worker进程cpu亲和性</span></div><div class="line"></div><div class="line"><span class="attribute">error_log</span>  logs/error.log;  <span class="comment"># 日志</span></div><div class="line"></div><div class="line"><span class="attribute">pid</span>        logs/nginx.pid;  <span class="comment"># master进程ID 用户nginx -s quit等命令</span></div><div class="line"></div><div class="line"><span class="attribute">worker_rlimit_nofile</span> <span class="number">65535</span>; <span class="comment"># 绕过系统单进程最大文件句柄打开数</span></div><div class="line"></div><div class="line"><span class="section">events</span> &#123;</div><div class="line">    <span class="attribute">use</span> <span class="literal">epoll</span>;              <span class="comment"># epoll网络模型</span></div><div class="line">    <span class="attribute">worker_connections</span>  <span class="number">65535</span>;      <span class="comment"># worker单进程最大连接数</span></div><div class="line">    <span class="attribute">multi_accept</span> <span class="literal">on</span>;        <span class="comment"># 惊群</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="section">http</span> &#123;</div><div class="line">    <span class="attribute">include</span>       mime.types;</div><div class="line">    <span class="attribute">default_type</span>  application/octet-stream;</div><div class="line"></div><div class="line">    <span class="attribute">log_format</span>  main  <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] "<span class="variable">$request</span>" '</span></div><div class="line">                      <span class="string">'<span class="variable">$status</span> <span class="variable">$body_bytes_sent</span> "<span class="variable">$http_referer</span>" '</span></div><div class="line">                      <span class="string">'"<span class="variable">$http_user_agent</span>" "<span class="variable">$http_x_forwarded_for</span>"'</span>;     <span class="comment"># access_log格式</span></div><div class="line"></div><div class="line">    <span class="attribute">access_log</span>  logs/access.log  main;      <span class="comment"># access_log格式</span></div><div class="line"></div><div class="line">    <span class="attribute">sendfile</span>        <span class="literal">on</span>;</div><div class="line">    <span class="attribute">tcp_nopush</span>     <span class="literal">on</span>;</div><div class="line">    <span class="attribute">tcp_nodelay</span> <span class="literal">on</span>;</div><div class="line"></div><div class="line">    <span class="comment">#keepalive_timeout  0;</span></div><div class="line">    <span class="attribute">keepalive_timeout</span>  <span class="number">65</span>;      <span class="comment"># http长连接</span></div><div class="line">    <span class="attribute">keepalive_disable</span> <span class="literal">none</span>;     <span class="comment"># 不再通过 User-Agent 中的浏览器信息，来决定是否 keepalive</span></div><div class="line"></div><div class="line">    <span class="comment"># 压缩</span></div><div class="line">    <span class="attribute">gzip</span> <span class="literal">on</span>;</div><div class="line">    <span class="attribute">gzip_min_length</span> <span class="number">1k</span>;</div><div class="line">    <span class="attribute">gzip_buffers</span> <span class="number">4</span> <span class="number">16k</span>;</div><div class="line">    <span class="attribute">gzip_http_version</span> <span class="number">1</span>.<span class="number">0</span>;</div><div class="line">    <span class="attribute">gzip_comp_level</span> <span class="number">4</span>;</div><div class="line">    <span class="attribute">gzip_types</span> text/plain application/x-javascript text/css application/xml;</div><div class="line">    <span class="attribute">gzip_vary</span> <span class="literal">on</span>;</div><div class="line"></div><div class="line">    <span class="section">server</span> &#123;</div><div class="line">        <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">        <span class="attribute">server_name</span>  coder-zhuyu.<span class="literal">info</span>;</div><div class="line"></div><div class="line">        <span class="attribute">charset</span> utf8;</div><div class="line"></div><div class="line">        <span class="comment">#access_log  logs/host.access.log  main;</span></div><div class="line">        <span class="attribute">root</span> html/blog;</div><div class="line"></div><div class="line">        <span class="attribute">location</span> / &#123;</div><div class="line">            <span class="comment"># root   html;</span></div><div class="line">            <span class="attribute">index</span>  index.html index.htm;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment"># 缓存文件</span></div><div class="line">        <span class="attribute">location</span> <span class="regexp">~ .*\.(gif|jpg|jpeg|png|bmp|swf|mp3)$</span> &#123;</div><div class="line">            <span class="attribute">expires</span>      <span class="number">30d</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="attribute">location</span> <span class="regexp">~ .*\.(js|css)?$</span> &#123;</div><div class="line">            <span class="attribute">expires</span>      <span class="number">30d</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="attribute">location</span> <span class="regexp">~ .*\.(svg)$</span> &#123;</div><div class="line">            <span class="attribute">root</span> html;</div><div class="line">            <span class="attribute">expires</span>     <span class="number">30d</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">#error_page  404              /404.html;</span></div><div class="line"></div><div class="line">        <span class="comment"># redirect server error pages to the static page /50x.html</span></div><div class="line">        <span class="comment">#</span></div><div class="line">        <span class="attribute">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</div><div class="line">        <span class="attribute">location</span> = /50x.html &#123;</div><div class="line">            <span class="attribute">root</span>   html;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="section">stream</span> &#123;</div><div class="line">    <span class="comment"># TCP UDP</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="hello-world"><a href="#hello-world" class="headerlink" title="hello world"></a>hello world</h2><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">location /helloworld &#123;</div><div class="line">    content_by_lua_block &#123;</div><div class="line">        ngx.say(<span class="string">"Hello, World!"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="技能图谱"><a href="#技能图谱" class="headerlink" title="技能图谱"></a>技能图谱</h2><p><img src="https://coder-zhuyu.github.io/images/blog/png-OpenResty-by-StuQ.png" alt="技能图谱"></p>
 
       
     </div>
@@ -446,13 +462,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Python/" rel="tag"># Python</a>
-          
-            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
-          
-            <a href="/tags/PyPy/" rel="tag"># PyPy</a>
-          
-            <a href="/tags/JIT/" rel="tag"># JIT</a>
+            <a href="/tags/OpenResty-Nginx/" rel="tag"># OpenResty Nginx</a>
           
         </div>
       
@@ -465,18 +475,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/07/26/Python性能优化之火焰图/" rel="next" title="Python性能优化之火焰图">
-                <i class="fa fa-chevron-left"></i> Python性能优化之火焰图
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/23/mysql数据类型选择/" rel="prev" title="mysql数据类型选择">
-                mysql数据类型选择 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/07/20/获取Let-s-Encrypt永久免费证书/" rel="prev" title="获取Let's Encrypt永久免费证书">
+                获取Let's Encrypt永久免费证书 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -626,7 +632,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PyPy源码安装"><span class="nav-number">1.</span> <span class="nav-text">PyPy源码安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PyPy使用"><span class="nav-number">2.</span> <span class="nav-text">PyPy使用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenResty介绍"><span class="nav-number">1.</span> <span class="nav-text">OpenResty介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置命令-ubuntu"><span class="nav-number">2.</span> <span class="nav-text">安装配置命令(ubuntu)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装步骤"><span class="nav-number">2.1.</span> <span class="nav-text">安装步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令"><span class="nav-number">2.2.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">2.3.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hello-world"><span class="nav-number">3.</span> <span class="nav-text">hello world</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技能图谱"><span class="nav-number">4.</span> <span class="nav-text">技能图谱</span></a></li></ol></div>
             
 
           </div>

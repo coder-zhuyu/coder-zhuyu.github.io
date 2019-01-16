@@ -153,4 +153,26 @@
     
   </entry>
   
+  <entry>
+    <title>OpenResty入门</title>
+    <link href="http://coder-zhuyu.info/2016/09/28/OpenResty%E5%85%A5%E9%97%A8/"/>
+    <id>http://coder-zhuyu.info/2016/09/28/OpenResty入门/</id>
+    <published>2016-09-28T13:35:47.000Z</published>
+    <updated>2019-01-16T14:44:37.789Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;OpenResty介绍&quot;&gt;&lt;a href=&quot;#OpenResty介绍&quot; class=&quot;headerlink&quot; title=&quot;OpenResty介绍&quot;&gt;&lt;/a&gt;OpenResty介绍&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Nginx的非阻塞网络模型，高并发、高性能&lt;/li&gt;
+&lt;
+    
+    </summary>
+    
+      <category term="OpenResty" scheme="http://coder-zhuyu.info/categories/OpenResty/"/>
+    
+    
+      <category term="OpenResty Nginx" scheme="http://coder-zhuyu.info/tags/OpenResty-Nginx/"/>
+    
+  </entry>
+  
 </feed>
