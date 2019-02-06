@@ -154,6 +154,26 @@
   </entry>
   
   <entry>
+    <title>OpenResty之cosocket</title>
+    <link href="http://coder-zhuyu.info/2016/10/09/OpenResty%E4%B9%8Bcosocket/"/>
+    <id>http://coder-zhuyu.info/2016/10/09/OpenResty之cosocket/</id>
+    <published>2016-10-09T14:03:50.000Z</published>
+    <updated>2019-02-06T15:21:36.663Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;cosocket是OpenResty世界中很重要的一个技术，cosocket是依赖Lua协程 + Nginx事件通知两个重要特性拼的。Lua脚本运行在独享的协程之上，可以在需要的时候暂停自己(yield)，在条件满足的时候被唤醒(resume)。网络操作时，暂停自己，把网络
+    
+    </summary>
+    
+      <category term="OpenResty" scheme="http://coder-zhuyu.info/categories/OpenResty/"/>
+    
+    
+      <category term="OpenResty cosocket" scheme="http://coder-zhuyu.info/tags/OpenResty-cosocket/"/>
+    
+  </entry>
+  
+  <entry>
     <title>OpenResty入门</title>
     <link href="http://coder-zhuyu.info/2016/09/28/OpenResty%E5%85%A5%E9%97%A8/"/>
     <id>http://coder-zhuyu.info/2016/09/28/OpenResty入门/</id>

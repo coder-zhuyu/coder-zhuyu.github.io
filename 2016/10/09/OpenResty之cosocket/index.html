@@ -77,13 +77,13 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="OpenResty cosocket," />
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="zhuyu's blog" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="coder-zhuyu博客" type="application/atom+xml" />
 
 
 
@@ -95,12 +95,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="zhuyu&#39;s blog">
-<meta property="og:url" content="http://yoursite.com/tags/随笔/index.html">
-<meta property="og:site_name" content="zhuyu&#39;s blog">
+<meta name="description" content="cosocket是OpenResty世界中很重要的一个技术，cosocket是依赖Lua协程 + Nginx事件通知两个重要特性拼的。Lua脚本运行在独享的协程之上，可以在需要的时候暂停自己(yield)，在条件满足的时候被唤醒(resume)。网络操作时，暂停自己，把网络事件注册到Nginx监听列表中，把cpu让出，运行权限交给Nginx。当有Nginx注册网络事件达到触发条件时，唤醒对应的协程">
+<meta name="keywords" content="OpenResty cosocket">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenResty之cosocket">
+<meta property="og:url" content="http://coder-zhuyu.info/2016/10/09/OpenResty之cosocket/index.html">
+<meta property="og:site_name" content="coder-zhuyu博客">
+<meta property="og:description" content="cosocket是OpenResty世界中很重要的一个技术，cosocket是依赖Lua协程 + Nginx事件通知两个重要特性拼的。Lua脚本运行在独享的协程之上，可以在需要的时候暂停自己(yield)，在条件满足的时候被唤醒(resume)。网络操作时，暂停自己，把网络事件注册到Nginx监听列表中，把cpu让出，运行权限交给Nginx。当有Nginx注册网络事件达到触发条件时，唤醒对应的协程">
+<meta property="og:updated_time" content="2019-02-06T15:21:36.663Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="zhuyu&#39;s blog">
+<meta name="twitter:title" content="OpenResty之cosocket">
+<meta name="twitter:description" content="cosocket是OpenResty世界中很重要的一个技术，cosocket是依赖Lua协程 + Nginx事件通知两个重要特性拼的。Lua脚本运行在独享的协程之上，可以在需要的时候暂停自己(yield)，在条件满足的时候被唤醒(resume)。网络操作时，暂停自己，把网络事件注册到Nginx监听列表中，把cpu让出，运行权限交给Nginx。当有Nginx注册网络事件达到触发条件时，唤醒对应的协程">
 
 
 
@@ -128,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/随笔/"/>
+  <link rel="canonical" href="http://coder-zhuyu.info/2016/10/09/OpenResty之cosocket/"/>
 
 
 
 
 
-  <title>标签: 随笔 | zhuyu's blog</title>
+  <title>OpenResty之cosocket | coder-zhuyu博客</title>
   
 
 
@@ -159,7 +164,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -170,7 +175,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">zhuyu's blog</span>
+        <span class="site-title">coder-zhuyu博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -277,44 +282,200 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h1>随笔<small>标签</small>
-      </h1>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://coder-zhuyu.info/2016/10/09/OpenResty之cosocket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="coder-zhuyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="coder-zhuyu博客">
+    </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OpenResty之cosocket</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-09T22:03:50+08:00">
+                2016-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenResty/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenResty</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2016/10/09/OpenResty之cosocket/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读次数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p>cosocket是OpenResty世界中很重要的一个技术，cosocket是依赖Lua协程 + Nginx事件通知两个重要特性拼的。Lua脚本运行在独享的协程之上，可以在需要的时候暂停自己(yield)，在条件满足的时候被唤醒(resume)。网络操作时，暂停自己，把网络事件注册到Nginx监听列表中，把cpu让出，运行权限交给Nginx。当有Nginx注册网络事件达到触发条件时，唤醒对应的协程继续处理。</p>
+<p>大量的模块都是基于cosocket，例如:</p>
+<ul>
+<li>lua-resty-mysql</li>
+<li>lua-resty-redis</li>
+<li>lua-resty-websocket</li>
+<li>lua-resty-http</li>
+<li>ngx_stream_lua_module</li>
+<li>……</li>
+</ul>
+<h1 id="ngx-socket-tcp的一个例子"><a href="#ngx-socket-tcp的一个例子" class="headerlink" title="ngx.socket.tcp的一个例子"></a>ngx.socket.tcp的一个例子</h1><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- server</span></div><div class="line">stream &#123;</div><div class="line">    server &#123;  </div><div class="line">        listen <span class="number">1234</span>;                   </div><div class="line">        content_by_lua_block &#123;         </div><div class="line">            <span class="keyword">local</span> sock, err = ngx.req.socket()</div><div class="line">            <span class="keyword">if</span> <span class="keyword">not</span> sock <span class="keyword">then</span>           </div><div class="line">                ngx.<span class="built_in">exit</span>(<span class="number">500</span>)          </div><div class="line">            <span class="keyword">end</span>   </div><div class="line">            <span class="keyword">while</span> <span class="literal">true</span> <span class="keyword">do</span>              </div><div class="line">                <span class="keyword">local</span> data             </div><div class="line">                data, err = sock:receive(<span class="string">'*l'</span>)</div><div class="line">                <span class="keyword">if</span> <span class="keyword">not</span> data <span class="keyword">then</span>       </div><div class="line">                    <span class="keyword">return</span> ngx.<span class="built_in">exit</span>(<span class="number">200</span>)   </div><div class="line">                <span class="keyword">end</span>                    </div><div class="line">                <span class="keyword">local</span> sent             </div><div class="line">                sent, err = sock:send(data .. <span class="string">'\n'</span>)</div><div class="line">                <span class="keyword">if</span> err <span class="keyword">then</span>            </div><div class="line">                    <span class="keyword">return</span> ngx.<span class="built_in">exit</span>(<span class="number">200</span>)</div><div class="line">                <span class="keyword">end</span></div><div class="line">            <span class="keyword">end</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- client</span></div><div class="line"><span class="keyword">local</span> sock = ngx.socket.tcp()</div><div class="line"><span class="keyword">local</span> ok, err = sock:connect(<span class="string">"127.0.0.1"</span>, <span class="number">1234</span>)</div><div class="line"><span class="keyword">if</span> <span class="keyword">not</span> ok <span class="keyword">then</span>   </div><div class="line">    ngx.say(<span class="string">"failed to connect: "</span>, err)</div><div class="line">    <span class="keyword">return</span>   </div><div class="line"><span class="keyword">end</span></div><div class="line"><span class="keyword">local</span> req_data = <span class="string">"hello world\r\n"</span></div><div class="line"><span class="keyword">local</span> bytes, err = sock:send(req_data)</div><div class="line"><span class="keyword">if</span> err <span class="keyword">then</span>  </div><div class="line">    ngx.say(<span class="string">"failed to send: "</span>, err)</div><div class="line">    <span class="keyword">return</span>   </div><div class="line"><span class="keyword">end</span></div><div class="line"><span class="keyword">local</span> data, err, partial = sock:receive(<span class="string">'*l'</span>)</div><div class="line"><span class="keyword">if</span> err <span class="keyword">then</span>  </div><div class="line">    ngx.say(<span class="string">"failed to recieve: "</span>, err)</div><div class="line">    <span class="keyword">return</span>   </div><div class="line"><span class="keyword">end</span></div><div class="line">sock:<span class="built_in">close</span>() </div><div class="line">ngx.say(<span class="string">"response first line: "</span>, data)</div></pre></td></tr></table></figure>
 
-      <h2 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2017/07/06/hello-world/" itemprop="url">
-              
-                <span itemprop="name">Hello World</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-06T10:46:38+08:00"
-              content="2017-07-06" >
-          07-06
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OpenResty-cosocket/" rel="tag"># OpenResty cosocket</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/28/OpenResty入门/" rel="next" title="OpenResty入门">
+                <i class="fa fa-chevron-left"></i> OpenResty入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/20/获取Let-s-Encrypt永久免费证书/" rel="prev" title="获取Let's Encrypt永久免费证书">
+                获取Let's Encrypt永久免费证书 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -322,6 +483,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
 
         </div>
         
@@ -341,8 +508,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -357,7 +533,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -368,7 +544,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -379,7 +555,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -423,6 +599,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ngx-socket-tcp的一个例子"><span class="nav-number">1.</span> <span class="nav-text">ngx.socket.tcp的一个例子</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -439,7 +631,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -562,10 +754,10 @@
 
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
