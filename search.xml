@@ -74,6 +74,17 @@
   </entry>
   <entry>
     <title><![CDATA[OpenResty之cosocket]]></title>
+    <url>%2F2016%2F10%2F14%2FOpenResty%E4%B9%8Baccesslog%E4%BF%AE%E6%94%B9%2F</url>
+    <content type="text"><![CDATA[Nginx的access log是在请求处理完成才写入日志文件的，下面将使用OpenResty将response加入到access log里面。123456789101112131415161718192021222324http &#123; log_format log_req_resp '$remote_addr - $remote_user [$time_local] ' '"$request" $status $body_bytes_sent ' '"$http_referer" "$http_user_agent" $request_time req_body:"$request_body" resp_body:"$resp_body"'; server &#123; listen 80; server_name localhost; access_log /tmp/nginx.resp.access.log log_req_resp; lua_need_request_body on; set $resp_body ""; # set resp_body 为空 location / &#123; body_filter_by_lua_block &#123; local resp_body = ngx.arg[1] ngx.ctx.buffered = (ngx.ctx.buffered or "") .. resp_body if ngx.arg[2] then # 判断是否是结尾 ngx.var.resp_body = ngx.ctx.buffered end &#125; proxy_pass http://xxx.xxx.xxx.xxx/; &#125; &#125;&#125; access log中文会被escape，可以对源码做修改来正常显示中文:123456789101112131415161718192021222324252627//ngx_http_log_module.cstatic u_char *ngx_http_log_variable(ngx_http_request_t *r, u_char *buf, ngx_http_log_op_t *op)&#123; ngx_http_log_loc_conf_t *lcf; ngx_http_variable_value_t *value; value = ngx_http_get_indexed_variable(r, op-&gt;data); if (value == NULL || value-&gt;not_found) &#123; *buf = '-'; return buf + 1; &#125; return ngx_cpymem(buf, value-&gt;data, value-&gt;len);// 注释下面代码#if 0 if (value-&gt;escape == 0) &#123; return ngx_cpymem(buf, value-&gt;data, value-&gt;len); &#125; else &#123; lcf = ngx_http_get_module_loc_conf(r, ngx_http_log_module); return (u_char *) ngx_http_log_escape(lcf, buf, value-&gt;data, value-&gt;len); &#125;#endif&#125;]]></content>
+      <categories>
+        <category>OpenResty</category>
+      </categories>
+      <tags>
+        <tag>OpenResty accesslog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[OpenResty之cosocket]]></title>
     <url>%2F2016%2F10%2F09%2FOpenResty%E4%B9%8Bcosocket%2F</url>
     <content type="text"><![CDATA[cosocket是OpenResty世界中很重要的一个技术，cosocket是依赖Lua协程 + Nginx事件通知两个重要特性拼的。Lua脚本运行在独享的协程之上，可以在需要的时候暂停自己(yield)，在条件满足的时候被唤醒(resume)。网络操作时，暂停自己，把网络事件注册到Nginx监听列表中，把cpu让出，运行权限交给Nginx。当有Nginx注册网络事件达到触发条件时，唤醒对应的协程继续处理。 大量的模块都是基于cosocket，例如: lua-resty-mysql lua-resty-redis lua-resty-websocket lua-resty-http ngx_stream_lua_module …… ngx.socket.tcp的一个例子123456789101112131415161718192021222324-- serverstream &#123; server &#123; listen 1234; content_by_lua_block &#123; local sock, err = ngx.req.socket() if not sock then ngx.exit(500) end while true do local data data, err = sock:receive('*l') if not data then return ngx.exit(200) end local sent sent, err = sock:send(data .. '\n') if err then return ngx.exit(200) end end &#125; &#125;&#125; 1234567891011121314151617181920-- clientlocal sock = ngx.socket.tcp()local ok, err = sock:connect("127.0.0.1", 1234)if not ok then ngx.say("failed to connect: ", err) return endlocal req_data = "hello world\r\n"local bytes, err = sock:send(req_data)if err then ngx.say("failed to send: ", err) return endlocal data, err, partial = sock:receive('*l')if err then ngx.say("failed to recieve: ", err) return endsock:close() ngx.say("response first line: ", data)]]></content>
       <categories>

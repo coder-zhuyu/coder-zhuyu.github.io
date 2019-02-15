@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="OpenResty accesslog," />
 
 
 
@@ -95,12 +95,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="coder-zhuyu博客">
-<meta property="og:url" content="http://coder-zhuyu.info/categories/nginx/index.html">
+<meta name="description" content="Nginx的access log是在请求处理完成才写入日志文件的，下面将使用OpenResty将response加入到access log里面。123456789101112131415161718192021222324http &amp;#123;    log_format log_req_resp &apos;$remote_addr - $remote_user [$time_local] &apos;">
+<meta name="keywords" content="OpenResty accesslog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenResty之cosocket">
+<meta property="og:url" content="http://coder-zhuyu.info/2016/10/14/OpenResty之accesslog修改/index.html">
 <meta property="og:site_name" content="coder-zhuyu博客">
+<meta property="og:description" content="Nginx的access log是在请求处理完成才写入日志文件的，下面将使用OpenResty将response加入到access log里面。123456789101112131415161718192021222324http &amp;#123;    log_format log_req_resp &apos;$remote_addr - $remote_user [$time_local] &apos;">
+<meta property="og:updated_time" content="2019-02-15T14:41:32.150Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="coder-zhuyu博客">
+<meta name="twitter:title" content="OpenResty之cosocket">
+<meta name="twitter:description" content="Nginx的access log是在请求处理完成才写入日志文件的，下面将使用OpenResty将response加入到access log里面。123456789101112131415161718192021222324http &amp;#123;    log_format log_req_resp &apos;$remote_addr - $remote_user [$time_local] &apos;">
 
 
 
@@ -128,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://coder-zhuyu.info/categories/nginx/"/>
+  <link rel="canonical" href="http://coder-zhuyu.info/2016/10/14/OpenResty之accesslog修改/"/>
 
 
 
 
 
-  <title>分类: nginx | coder-zhuyu博客</title>
+  <title>OpenResty之cosocket | coder-zhuyu博客</title>
   
 
 
@@ -159,7 +164,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -277,45 +282,190 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h1>nginx<small>分类</small>
-      </h1>
-    </div>
-
+  <div id="posts" class="posts-expand">
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/01/systemtap分析nginx一次http请求函数调用过程/" itemprop="url">
-              
-                <span itemprop="name">systemtap分析nginx一次http请求函数调用过程</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-01T22:52:48+08:00"
-              content="2018-01-01" >
-          01-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-  </section>
 
   
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://coder-zhuyu.info/2016/10/14/OpenResty之accesslog修改/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="coder-zhuyu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="coder-zhuyu博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OpenResty之cosocket</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-14T22:15:30+08:00">
+                2016-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenResty/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenResty</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2016/10/14/OpenResty之accesslog修改/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读次数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Nginx的access log是在请求处理完成才写入日志文件的，下面将使用OpenResty将response加入到access log里面。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">http &#123;</div><div class="line">    log_format log_req_resp <span class="string">'$remote_addr - $remote_user [$time_local] '</span></div><div class="line">        <span class="string">'"$request" $status $body_bytes_sent '</span></div><div class="line">        <span class="string">'"$http_referer" "$http_user_agent" $request_time</span></div><div class="line">        req_body:"$request_body" resp_body:"$resp_body"';</div><div class="line">    server &#123;</div><div class="line">        listen       80;</div><div class="line">        server_name  localhost;</div><div class="line">        access_log /tmp/nginx.resp.access.log log_req_resp;</div><div class="line">        lua_need_request_body on;</div><div class="line">        <span class="built_in">set</span> <span class="variable">$resp_body</span> <span class="string">""</span>;      <span class="comment"># set resp_body 为空</span></div><div class="line">        location / &#123;</div><div class="line">            body_filter_by_lua_block &#123;</div><div class="line">                <span class="built_in">local</span> resp_body = ngx.arg[1]</div><div class="line">                ngx.ctx.buffered = (ngx.ctx.buffered or <span class="string">""</span>) .. resp_body</div><div class="line">                <span class="keyword">if</span> ngx.arg[2] <span class="keyword">then</span>      <span class="comment"># 判断是否是结尾</span></div><div class="line">                     ngx.var.resp_body = ngx.ctx.buffered</div><div class="line">                end</div><div class="line">            &#125;</div><div class="line">    </div><div class="line">            proxy_pass http://xxx.xxx.xxx.xxx/;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>access log中文会被escape，可以对源码做修改来正常显示中文:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ngx_http_log_module.c</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> u_char *</span></div><div class="line"><span class="title">ngx_http_log_variable</span><span class="params">(<span class="keyword">ngx_http_request_t</span> *r, u_char *buf, <span class="keyword">ngx_http_log_op_t</span> *op)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">ngx_http_log_loc_conf_t</span>    *lcf;</div><div class="line">    <span class="keyword">ngx_http_variable_value_t</span>  *value;</div><div class="line"></div><div class="line">    value = ngx_http_get_indexed_variable(r, op-&gt;data);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (value == <span class="literal">NULL</span> || value-&gt;not_found) &#123;</div><div class="line">        *buf = <span class="string">'-'</span>;</div><div class="line">        <span class="keyword">return</span> buf + <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> ngx_cpymem(buf, value-&gt;data, value-&gt;len);</div><div class="line"><span class="comment">// 注释下面代码</span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line">    <span class="keyword">if</span> (value-&gt;escape == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">return</span> ngx_cpymem(buf, value-&gt;data, value-&gt;len);</div><div class="line"></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        lcf = ngx_http_get_module_loc_conf(r, ngx_http_log_module);</div><div class="line">        <span class="keyword">return</span> (u_char *) ngx_http_log_escape(lcf, buf, value-&gt;data, value-&gt;len);</div><div class="line">    &#125;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OpenResty-accesslog/" rel="tag"># OpenResty accesslog</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/09/OpenResty之cosocket/" rel="next" title="OpenResty之cosocket">
+                <i class="fa fa-chevron-left"></i> OpenResty之cosocket
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/20/获取Let-s-Encrypt永久免费证书/" rel="prev" title="获取Let's Encrypt永久免费证书">
+                获取Let's Encrypt永久免费证书 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -323,6 +473,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
 
         </div>
         
@@ -563,10 +719,10 @@
 
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 

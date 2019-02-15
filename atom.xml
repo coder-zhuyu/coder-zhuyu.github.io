@@ -155,6 +155,26 @@
   
   <entry>
     <title>OpenResty之cosocket</title>
+    <link href="http://coder-zhuyu.info/2016/10/14/OpenResty%E4%B9%8Baccesslog%E4%BF%AE%E6%94%B9/"/>
+    <id>http://coder-zhuyu.info/2016/10/14/OpenResty之accesslog修改/</id>
+    <published>2016-10-14T14:15:30.000Z</published>
+    <updated>2019-02-15T14:41:32.150Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Nginx的access log是在请求处理完成才写入日志文件的，下面将使用OpenResty将response加入到access log里面。&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;
+    
+    </summary>
+    
+      <category term="OpenResty" scheme="http://coder-zhuyu.info/categories/OpenResty/"/>
+    
+    
+      <category term="OpenResty accesslog" scheme="http://coder-zhuyu.info/tags/OpenResty-accesslog/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OpenResty之cosocket</title>
     <link href="http://coder-zhuyu.info/2016/10/09/OpenResty%E4%B9%8Bcosocket/"/>
     <id>http://coder-zhuyu.info/2016/10/09/OpenResty之cosocket/</id>
     <published>2016-10-09T14:03:50.000Z</published>
