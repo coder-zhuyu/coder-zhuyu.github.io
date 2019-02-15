@@ -154,6 +154,26 @@
   </entry>
   
   <entry>
+    <title>lua-resty-mysql事务封装</title>
+    <link href="http://coder-zhuyu.info/2016/10/22/lua-resty-mysql%E4%BA%8B%E5%8A%A1%E5%B0%81%E8%A3%85/"/>
+    <id>http://coder-zhuyu.info/2016/10/22/lua-resty-mysql事务封装/</id>
+    <published>2016-10-22T12:23:05.000Z</published>
+    <updated>2019-02-15T15:04:19.519Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;lua-resty-mysql没有提供事务封装，下面提供一个事务的封装例子的主要代码部分。事务是基于session，主要将事务相关语句在同一个session上执行。&lt;br&gt;&lt;figure class=&quot;highlight lua&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=
+    
+    </summary>
+    
+      <category term="OpenResty" scheme="http://coder-zhuyu.info/categories/OpenResty/"/>
+    
+    
+      <category term="OpenResty lua-resty-mysql" scheme="http://coder-zhuyu.info/tags/OpenResty-lua-resty-mysql/"/>
+    
+  </entry>
+  
+  <entry>
     <title>OpenResty之AccessLog记录response</title>
     <link href="http://coder-zhuyu.info/2016/10/14/OpenResty%E4%B9%8Baccesslog%E4%BF%AE%E6%94%B9/"/>
     <id>http://coder-zhuyu.info/2016/10/14/OpenResty之accesslog修改/</id>
