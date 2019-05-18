@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="OpenResty Nginx," />
+  <meta name="keywords" content="mysql," />
 
 
 
@@ -95,19 +95,20 @@
 
 
 
-<meta name="description" content="OpenResty介绍 Nginx的非阻塞网络模型，高并发、高性能 Lua脚本语言的灵活、小巧、高效 Lua协程与Nginx非阻塞网络模型融合，以同步的方式写非阻塞代码 OpenResty生态日趋完善，大量应用在高并发场景下，大量优秀的模块 参考 https://openresty.org/en/download.html http://nginx.org/en/docs/ http://luaj">
-<meta name="keywords" content="OpenResty Nginx">
+<meta name="description" content="InnoDB为啥用B+树做索引结构 Hash索引Hash只能做精确的等值查询，不能做部分匹配，不能做范围查询，不能排序 有序数组数组对于增删操作需要移动后面的数据 平衡二叉查找树数据量大时，树的高度相对会大，中序遍历可以得到一个有序序列，但是不足以按照区间快速查找数据 B树不能支持范围查询，排序 B+树叶子节点是一个有序链表 跳跃表类似与B+树，也是可以的  InnoDB数据存储方式MySQL的数">
+<meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OpenResty入门">
-<meta property="og:url" content="http://coder-zhuyu.info/2016/09/28/OpenResty入门/index.html">
+<meta property="og:title" content="mysql数据类型选择">
+<meta property="og:url" content="http://coder-zhuyu.info/2017/11/02/mysql索引总结/index.html">
 <meta property="og:site_name" content="coder-zhuyu博客">
-<meta property="og:description" content="OpenResty介绍 Nginx的非阻塞网络模型，高并发、高性能 Lua脚本语言的灵活、小巧、高效 Lua协程与Nginx非阻塞网络模型融合，以同步的方式写非阻塞代码 OpenResty生态日趋完善，大量应用在高并发场景下，大量优秀的模块 参考 https://openresty.org/en/download.html http://nginx.org/en/docs/ http://luaj">
-<meta property="og:image" content="https://coder-zhuyu.github.io/images/blog/png-OpenResty-by-StuQ.png">
-<meta property="og:updated_time" content="2019-01-16T14:44:37.000Z">
+<meta property="og:description" content="InnoDB为啥用B+树做索引结构 Hash索引Hash只能做精确的等值查询，不能做部分匹配，不能做范围查询，不能排序 有序数组数组对于增删操作需要移动后面的数据 平衡二叉查找树数据量大时，树的高度相对会大，中序遍历可以得到一个有序序列，但是不足以按照区间快速查找数据 B树不能支持范围查询，排序 B+树叶子节点是一个有序链表 跳跃表类似与B+树，也是可以的  InnoDB数据存储方式MySQL的数">
+<meta property="og:image" content="https://coder-zhuyu.github.io/images/blog/mysql-index.png">
+<meta property="og:image" content="https://coder-zhuyu.github.io/images/blog/mysql-index2.png">
+<meta property="og:updated_time" content="2019-05-18T04:27:14.470Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OpenResty入门">
-<meta name="twitter:description" content="OpenResty介绍 Nginx的非阻塞网络模型，高并发、高性能 Lua脚本语言的灵活、小巧、高效 Lua协程与Nginx非阻塞网络模型融合，以同步的方式写非阻塞代码 OpenResty生态日趋完善，大量应用在高并发场景下，大量优秀的模块 参考 https://openresty.org/en/download.html http://nginx.org/en/docs/ http://luaj">
-<meta name="twitter:image" content="https://coder-zhuyu.github.io/images/blog/png-OpenResty-by-StuQ.png">
+<meta name="twitter:title" content="mysql数据类型选择">
+<meta name="twitter:description" content="InnoDB为啥用B+树做索引结构 Hash索引Hash只能做精确的等值查询，不能做部分匹配，不能做范围查询，不能排序 有序数组数组对于增删操作需要移动后面的数据 平衡二叉查找树数据量大时，树的高度相对会大，中序遍历可以得到一个有序序列，但是不足以按照区间快速查找数据 B树不能支持范围查询，排序 B+树叶子节点是一个有序链表 跳跃表类似与B+树，也是可以的  InnoDB数据存储方式MySQL的数">
+<meta name="twitter:image" content="https://coder-zhuyu.github.io/images/blog/mysql-index.png">
 
 
 
@@ -135,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://coder-zhuyu.info/2016/09/28/OpenResty入门/"/>
+  <link rel="canonical" href="http://coder-zhuyu.info/2017/11/02/mysql索引总结/"/>
 
 
 
 
 
-  <title>OpenResty入门 | coder-zhuyu博客</title>
+  <title>mysql数据类型选择 | coder-zhuyu博客</title>
   
 
 
@@ -294,7 +295,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://coder-zhuyu.info/2016/09/28/OpenResty入门/">
+    <link itemprop="mainEntityOfPage" href="http://coder-zhuyu.info/2017/11/02/mysql索引总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="coder-zhuyu">
@@ -311,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">OpenResty入门</h1>
+          <h1 class="post-title" itemprop="name headline">mysql数据类型选择</h1>
         
 
         <div class="post-meta">
@@ -323,8 +324,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-28T21:35:47+08:00">
-                2016-09-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-02T22:30:40+08:00">
+                2017-11-02
               </time>
             
 
@@ -346,8 +347,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/OpenResty/" itemprop="url" rel="index">
-                    <span itemprop="name">OpenResty</span>
+                  <a href="/categories/mysql-索引/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql 索引</span>
                   </a>
                 </span>
 
@@ -364,7 +365,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a class="cloud-tie-join-count" href="/2016/09/28/OpenResty入门/#comments" itemprop="discussionUrl">
+                <a class="cloud-tie-join-count" href="/2017/11/02/mysql索引总结/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count join-count" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -395,44 +396,54 @@
       
 
       
-        <h2 id="OpenResty介绍"><a href="#OpenResty介绍" class="headerlink" title="OpenResty介绍"></a>OpenResty介绍</h2><ul>
-<li>Nginx的非阻塞网络模型，高并发、高性能</li>
-<li>Lua脚本语言的灵活、小巧、高效</li>
-<li>Lua协程与Nginx非阻塞网络模型融合，以同步的方式写非阻塞代码</li>
-<li>OpenResty生态日趋完善，大量应用在高并发场景下，大量优秀的模块</li>
-<li>参考<ul>
-<li><a href="https://openresty.org/en/download.html" target="_blank" rel="external">https://openresty.org/en/download.html</a></li>
-<li><a href="http://nginx.org/en/docs/" target="_blank" rel="external">http://nginx.org/en/docs/</a></li>
-<li><a href="http://luajit.org/index.html" target="_blank" rel="external">http://luajit.org/index.html</a></li>
-<li><a href="http://www.lua.org/manual/5.1/" target="_blank" rel="external">http://www.lua.org/manual/5.1/</a></li>
-<li><a href="https://www.gitbook.com/book/moonbingbing/openresty-best-practices/details(最佳实践" target="_blank" rel="external">https://www.gitbook.com/book/moonbingbing/openresty-best-practices/details(最佳实践</a>)</li>
-<li><a href="https://github.com/openresty/lua-nginx-module" target="_blank" rel="external">https://github.com/openresty/lua-nginx-module</a></li>
-<li><a href="https://github.com/Iresty/nginx-lua-module-zh-wiki(上一官方文档中文翻译" target="_blank" rel="external">https://github.com/Iresty/nginx-lua-module-zh-wiki(上一官方文档中文翻译</a>)</li>
-<li><a href="https://github.com/bungle/awesome-resty(相关资源整理汇总" target="_blank" rel="external">https://github.com/bungle/awesome-resty(相关资源整理汇总</a>)</li>
+        <h1 id="InnoDB为啥用B-树做索引结构"><a href="#InnoDB为啥用B-树做索引结构" class="headerlink" title="InnoDB为啥用B+树做索引结构"></a>InnoDB为啥用B+树做索引结构</h1><ul>
+<li>Hash索引<br>Hash只能做精确的等值查询，不能做部分匹配，不能做范围查询，不能排序</li>
+<li>有序数组<br>数组对于增删操作需要移动后面的数据</li>
+<li>平衡二叉查找树<br>数据量大时，树的高度相对会大，中序遍历可以得到一个有序序列，但是不足以按照区间快速查找数据</li>
+<li>B树<br>不能支持范围查询，排序</li>
+<li>B+树<br>叶子节点是一个有序链表</li>
+<li>跳跃表<br>类似与B+树，也是可以的</li>
 </ul>
-</li>
+<h1 id="InnoDB数据存储方式"><a href="#InnoDB数据存储方式" class="headerlink" title="InnoDB数据存储方式"></a>InnoDB数据存储方式</h1><p>MySQL的数据是存储在聚簇索引上的，MySQL的每个表会按照主键建立一个聚簇索引，每行数据挂在B+树的叶子节点上，非聚簇索引的叶子节点除了索引字段的值，还会存储主键的值。如果使用了非聚簇索引，而且还需要查找索引字段之外的字段值，这时候就需要使用主键进行回表操作。</p>
+<h2 id="聚簇索引"><a href="#聚簇索引" class="headerlink" title="聚簇索引"></a>聚簇索引</h2><p><img src="https://coder-zhuyu.github.io/images/blog/mysql-index.png" alt="聚簇索引示意图，摘自csdn"></p>
+<ul>
+<li>InnoDB基于主键建立聚簇索引</li>
+<li>没有主键，会用唯一索引建立</li>
+<li>没有唯一索引，InnoDB会定义一个隐藏的主键，然后对其建立聚簇索引</li>
 </ul>
-<h2 id="安装配置命令-ubuntu"><a href="#安装配置命令-ubuntu" class="headerlink" title="安装配置命令(ubuntu)"></a>安装配置命令(ubuntu)</h2><h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><ol>
-<li><p>依赖安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install libreadline-dev libncurses5-dev libpcre3-dev ibssl-dev perl make build-essential</div></pre></td></tr></table></figure>
-</li>
-<li><p>源码解压</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar zxvf openresty-version.tar.gz &amp;&amp; <span class="built_in">cd</span> openresty-version/</div></pre></td></tr></table></figure>
-</li>
-<li><p>configure</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=/opt/openresty --with-luajit --withhttp_iconv_module -j2</div></pre></td></tr></table></figure>
-</li>
-<li><p>编译</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make -j2</div></pre></td></tr></table></figure>
-</li>
-<li><p>安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo make install</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">./configure --<span class="built_in">help</span>      <span class="comment"># 查看安装配置参数</span></div><div class="line">nginx                   <span class="comment"># 启动</span></div><div class="line">nginx -p /opt/openresty/nginx   <span class="comment"># 指定启动prefix路径</span></div><div class="line">nginx -c /opt/openresty/nginx/conf/nginx.conf       <span class="comment"># 指定启动配置文件</span></div><div class="line">nginx -t                <span class="comment"># 检查nginx.conf配置文件里的配置项合法否</span></div><div class="line">nginx -V                <span class="comment"># 查看版本及编译进去的模块</span></div><div class="line">nginx -s stop           <span class="comment"># 强制退出</span></div><div class="line">nginx -s quit           <span class="comment"># 优雅退出</span></div><div class="line">nginx -s reload         <span class="comment"># 重新加载配置文件 优雅重启</span></div><div class="line">nginx -s reopen         <span class="comment"># 重新打开日志文件, 用于切换日志</span></div></pre></td></tr></table></figure>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">user</span>  resty;    <span class="comment"># worker进程运行用户 涉及到权限</span></div><div class="line"><span class="attribute">worker_processes</span>  auto;     <span class="comment"># worker进程数为cpu核数</span></div><div class="line"><span class="attribute">worker_cpu_affinity</span> auto;   <span class="comment"># worker进程cpu亲和性</span></div><div class="line"></div><div class="line"><span class="attribute">error_log</span>  logs/error.log;  <span class="comment"># 日志</span></div><div class="line"></div><div class="line"><span class="attribute">pid</span>        logs/nginx.pid;  <span class="comment"># master进程ID 用户nginx -s quit等命令</span></div><div class="line"></div><div class="line"><span class="attribute">worker_rlimit_nofile</span> <span class="number">65535</span>; <span class="comment"># 绕过系统单进程最大文件句柄打开数</span></div><div class="line"></div><div class="line"><span class="section">events</span> &#123;</div><div class="line">    <span class="attribute">use</span> <span class="literal">epoll</span>;              <span class="comment"># epoll网络模型</span></div><div class="line">    <span class="attribute">worker_connections</span>  <span class="number">65535</span>;      <span class="comment"># worker单进程最大连接数</span></div><div class="line">    <span class="attribute">multi_accept</span> <span class="literal">on</span>;        <span class="comment"># 惊群</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="section">http</span> &#123;</div><div class="line">    <span class="attribute">include</span>       mime.types;</div><div class="line">    <span class="attribute">default_type</span>  application/octet-stream;</div><div class="line"></div><div class="line">    <span class="attribute">log_format</span>  main  <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] "<span class="variable">$request</span>" '</span></div><div class="line">                      <span class="string">'<span class="variable">$status</span> <span class="variable">$body_bytes_sent</span> "<span class="variable">$http_referer</span>" '</span></div><div class="line">                      <span class="string">'"<span class="variable">$http_user_agent</span>" "<span class="variable">$http_x_forwarded_for</span>"'</span>;     <span class="comment"># access_log格式</span></div><div class="line"></div><div class="line">    <span class="attribute">access_log</span>  logs/access.log  main;      <span class="comment"># access_log格式</span></div><div class="line"></div><div class="line">    <span class="attribute">sendfile</span>        <span class="literal">on</span>;</div><div class="line">    <span class="attribute">tcp_nopush</span>     <span class="literal">on</span>;</div><div class="line">    <span class="attribute">tcp_nodelay</span> <span class="literal">on</span>;</div><div class="line"></div><div class="line">    <span class="comment">#keepalive_timeout  0;</span></div><div class="line">    <span class="attribute">keepalive_timeout</span>  <span class="number">65</span>;      <span class="comment"># http长连接</span></div><div class="line">    <span class="attribute">keepalive_disable</span> <span class="literal">none</span>;     <span class="comment"># 不再通过 User-Agent 中的浏览器信息，来决定是否 keepalive</span></div><div class="line"></div><div class="line">    <span class="comment"># 压缩</span></div><div class="line">    <span class="attribute">gzip</span> <span class="literal">on</span>;</div><div class="line">    <span class="attribute">gzip_min_length</span> <span class="number">1k</span>;</div><div class="line">    <span class="attribute">gzip_buffers</span> <span class="number">4</span> <span class="number">16k</span>;</div><div class="line">    <span class="attribute">gzip_http_version</span> <span class="number">1</span>.<span class="number">0</span>;</div><div class="line">    <span class="attribute">gzip_comp_level</span> <span class="number">4</span>;</div><div class="line">    <span class="attribute">gzip_types</span> text/plain application/x-javascript text/css application/xml;</div><div class="line">    <span class="attribute">gzip_vary</span> <span class="literal">on</span>;</div><div class="line"></div><div class="line">    <span class="section">server</span> &#123;</div><div class="line">        <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">        <span class="attribute">server_name</span>  coder-zhuyu.<span class="literal">info</span>;</div><div class="line"></div><div class="line">        <span class="attribute">charset</span> utf8;</div><div class="line"></div><div class="line">        <span class="comment">#access_log  logs/host.access.log  main;</span></div><div class="line">        <span class="attribute">root</span> html/blog;</div><div class="line"></div><div class="line">        <span class="attribute">location</span> / &#123;</div><div class="line">            <span class="comment"># root   html;</span></div><div class="line">            <span class="attribute">index</span>  index.html index.htm;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment"># 缓存文件</span></div><div class="line">        <span class="attribute">location</span> <span class="regexp">~ .*\.(gif|jpg|jpeg|png|bmp|swf|mp3)$</span> &#123;</div><div class="line">            <span class="attribute">expires</span>      <span class="number">30d</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="attribute">location</span> <span class="regexp">~ .*\.(js|css)?$</span> &#123;</div><div class="line">            <span class="attribute">expires</span>      <span class="number">30d</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="attribute">location</span> <span class="regexp">~ .*\.(svg)$</span> &#123;</div><div class="line">            <span class="attribute">root</span> html;</div><div class="line">            <span class="attribute">expires</span>     <span class="number">30d</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">#error_page  404              /404.html;</span></div><div class="line"></div><div class="line">        <span class="comment"># redirect server error pages to the static page /50x.html</span></div><div class="line">        <span class="comment">#</span></div><div class="line">        <span class="attribute">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</div><div class="line">        <span class="attribute">location</span> = /50x.html &#123;</div><div class="line">            <span class="attribute">root</span>   html;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="section">stream</span> &#123;</div><div class="line">    <span class="comment"># TCP UDP</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="hello-world"><a href="#hello-world" class="headerlink" title="hello world"></a>hello world</h2><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">location /helloworld &#123;</div><div class="line">    content_by_lua_block &#123;</div><div class="line">        ngx.say(<span class="string">"Hello, World!"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="技能图谱"><a href="#技能图谱" class="headerlink" title="技能图谱"></a>技能图谱</h2><p><img src="https://coder-zhuyu.github.io/images/blog/png-OpenResty-by-StuQ.png" alt="技能图谱"></p>
+<p>InnoDB默认使用聚簇索引来组织数据，如果你用InnoDB，而且不需要特殊的聚簇索引，一个好的做法就是使用代理主键(surrogate key)——独立于你的应用中的数据。最简单的做法就是使用一个AUTO_INCREMENT的列，这会保证记录按照顺序插入，而且能提高使用primary  key进行连接的查询的性能。应该尽量避免随机的聚簇主键，例如字符串主键就是一个不好的选择，它使得插入操作变得随机，不是按顺序插入，会产生页分裂、页合并等操作。</p>
+<h2 id="非聚簇索引-二级索引"><a href="#非聚簇索引-二级索引" class="headerlink" title="非聚簇索引(二级索引)"></a>非聚簇索引(二级索引)</h2><p><img src="https://coder-zhuyu.github.io/images/blog/mysql-index2.png" alt="非聚簇索引示意图，摘自csdn"></p>
+<h1 id="InnoDB索引"><a href="#InnoDB索引" class="headerlink" title="InnoDB索引"></a>InnoDB索引</h1><h2 id="聚簇索引-1"><a href="#聚簇索引-1" class="headerlink" title="聚簇索引"></a>聚簇索引</h2><h2 id="二级索引"><a href="#二级索引" class="headerlink" title="二级索引"></a>二级索引</h2><h2 id="组合索引"><a href="#组合索引" class="headerlink" title="组合索引"></a>组合索引</h2><p>在多个列上建立的联合索引，对比单字段索引</p>
+<h2 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h2><p>select筛选的字段都在索引包含的字段中，不需要进行回表操作</p>
+<h2 id="最左前缀"><a href="#最左前缀" class="headerlink" title="最左前缀"></a>最左前缀</h2><p>组合索引是按照字段从左到右排序来组织索引的，从中间字段开始比较不是按序的，无法使用到索引，必须第一字段开始，不能跳过中间字段使用后面的字段。如<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">组合索引(a, b, c)</div><div class="line">可以用到的索引</div><div class="line">a</div><div class="line">a, b</div><div class="line">a, b, c</div></pre></td></tr></table></figure></p>
+<h2 id="前缀索引"><a href="#前缀索引" class="headerlink" title="前缀索引"></a>前缀索引</h2><p>可以在字符串字段上基于字符串前多少个字符建立前缀索引，这种索引的优势是减少索引空间</p>
+<h2 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">表t有一个组合索引(a,b,c)</div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t <span class="keyword">where</span> a=<span class="number">1</span> <span class="keyword">and</span> b&gt;=<span class="number">100</span> <span class="keyword">and</span> b&lt;=<span class="number">200</span> <span class="keyword">and</span> c=<span class="string">'X'</span>;</div><div class="line">这个查询会用到索引(a,b,c)的(a,b)，因为b是范围查询，就会走到页子节点，不会在使用索引节点加上查询，但是c在索引中，索引可以利用叶子节点中c的值来做过滤，这就是所谓的索引下推</div></pre></td></tr></table></figure>
+<h2 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h2><p>普通索引允许被索引的数据列包含重复的值。而唯一索引列的值必须唯一，但允许有空值。如果是组合索引，则列值的组合必须唯一</p>
+<ul>
+<li>唯一索引在查询的时候可以唯一确定一行，所以查到记录就会停止查询，而普通索引还有继续向后遍历到第一个不满足的条件为止</li>
+</ul>
+<h1 id="索引设计"><a href="#索引设计" class="headerlink" title="索引设计"></a>索引设计</h1><ul>
+<li>尽量选择区分度高的列作为索引<br>区分度的公式是 COUNT(DISTINCT col) / COUNT(*)</li>
+<li>NULL也是可以走索引的</li>
+<li>使用组合索引代替多个列索引</li>
+<li>注意重复/冗余的索引、不使用的索引</li>
+<li>唯一索引<br>业务无法保证数据的唯一的时候，可以使用唯一索引通过数据库保证数据的唯一</li>
+</ul>
+<h1 id="索引选择"><a href="#索引选择" class="headerlink" title="索引选择"></a>索引选择</h1><p>优化器基于代价进行索引选择，扫描行数（基于统计的）、是否使用临时表、是否排序等</p>
+<h2 id="索引选择异常处理"><a href="#索引选择异常处理" class="headerlink" title="索引选择异常处理"></a>索引选择异常处理</h2><ul>
+<li>force index (hard code)</li>
+<li>修改sql引导mysql选择正确的索引</li>
+<li>删掉误导的索引，新建合适的索引</li>
+</ul>
+<h1 id="索引使用"><a href="#索引使用" class="headerlink" title="索引使用"></a>索引使用</h1><ul>
+<li>like语句不要以通配符开头<br>在以通配符%和_开头作查询时，MySQL不会使用索引</li>
+<li>不要在列上进行运算<br>表达式、函数</li>
+<li>隐式类型转换、隐式字符编码转换、排序规则不一样 都不走索引</li>
+<li>尽量不要使用NOT IN、&lt;&gt;、!= 操作<br>引擎放弃使用索引而进行全表扫描，使用&gt;或&lt;会比较高效</li>
+<li>in值太多时也是不走索引的，数据库有配置</li>
+<li>or条件<br>在or条件的每个字段上单独建立索引，也是可以走索引的，会走union合并</li>
+<li>组合索引的使用要遵守“最左前缀”原则</li>
+</ul>
 
       
     </div>
@@ -462,7 +473,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/OpenResty-Nginx/" rel="tag"># OpenResty Nginx</a>
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
           
         </div>
       
@@ -475,14 +486,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/10/27/python垃圾回收机制/" rel="next" title="python垃圾回收">
+                <i class="fa fa-chevron-left"></i> python垃圾回收
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/10/09/OpenResty之cosocket/" rel="prev" title="OpenResty之cosocket">
-                OpenResty之cosocket <i class="fa fa-chevron-right"></i>
+              <a href="/2018/01/01/systemtap分析nginx一次http请求函数调用过程/" rel="prev" title="systemtap分析nginx一次http请求函数调用过程">
+                systemtap分析nginx一次http请求函数调用过程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -632,7 +647,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenResty介绍"><span class="nav-number">1.</span> <span class="nav-text">OpenResty介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置命令-ubuntu"><span class="nav-number">2.</span> <span class="nav-text">安装配置命令(ubuntu)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装步骤"><span class="nav-number">2.1.</span> <span class="nav-text">安装步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令"><span class="nav-number">2.2.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">2.3.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hello-world"><span class="nav-number">3.</span> <span class="nav-text">hello world</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技能图谱"><span class="nav-number">4.</span> <span class="nav-text">技能图谱</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#InnoDB为啥用B-树做索引结构"><span class="nav-number">1.</span> <span class="nav-text">InnoDB为啥用B+树做索引结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#InnoDB数据存储方式"><span class="nav-number">2.</span> <span class="nav-text">InnoDB数据存储方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#聚簇索引"><span class="nav-number">2.1.</span> <span class="nav-text">聚簇索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非聚簇索引-二级索引"><span class="nav-number">2.2.</span> <span class="nav-text">非聚簇索引(二级索引)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#InnoDB索引"><span class="nav-number">3.</span> <span class="nav-text">InnoDB索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#聚簇索引-1"><span class="nav-number">3.1.</span> <span class="nav-text">聚簇索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二级索引"><span class="nav-number">3.2.</span> <span class="nav-text">二级索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合索引"><span class="nav-number">3.3.</span> <span class="nav-text">组合索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#覆盖索引"><span class="nav-number">3.4.</span> <span class="nav-text">覆盖索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最左前缀"><span class="nav-number">3.5.</span> <span class="nav-text">最左前缀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前缀索引"><span class="nav-number">3.6.</span> <span class="nav-text">前缀索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引下推"><span class="nav-number">3.7.</span> <span class="nav-text">索引下推</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#唯一索引"><span class="nav-number">3.8.</span> <span class="nav-text">唯一索引</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引设计"><span class="nav-number">4.</span> <span class="nav-text">索引设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引选择"><span class="nav-number">5.</span> <span class="nav-text">索引选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引选择异常处理"><span class="nav-number">5.1.</span> <span class="nav-text">索引选择异常处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引使用"><span class="nav-number">6.</span> <span class="nav-text">索引使用</span></a></li></ol></div>
             
 
           </div>
