@@ -98,15 +98,15 @@
 <meta name="description" content="InnoDB为啥用B+树做索引结构 Hash索引Hash只能做精确的等值查询，不能做部分匹配，不能做范围查询，不能排序 有序数组数组对于增删操作需要移动后面的数据 平衡二叉查找树数据量大时，树的高度相对会大，中序遍历可以得到一个有序序列，但是不足以按照区间快速查找数据 B树不能支持范围查询，排序 B+树叶子节点是一个有序链表 跳跃表类似与B+树，也是可以的  InnoDB数据存储方式MySQL的数">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql数据类型选择">
+<meta property="og:title" content="mysql索引总结">
 <meta property="og:url" content="http://coder-zhuyu.info/2017/11/02/mysql索引总结/index.html">
 <meta property="og:site_name" content="coder-zhuyu博客">
 <meta property="og:description" content="InnoDB为啥用B+树做索引结构 Hash索引Hash只能做精确的等值查询，不能做部分匹配，不能做范围查询，不能排序 有序数组数组对于增删操作需要移动后面的数据 平衡二叉查找树数据量大时，树的高度相对会大，中序遍历可以得到一个有序序列，但是不足以按照区间快速查找数据 B树不能支持范围查询，排序 B+树叶子节点是一个有序链表 跳跃表类似与B+树，也是可以的  InnoDB数据存储方式MySQL的数">
 <meta property="og:image" content="https://coder-zhuyu.github.io/images/blog/mysql-index.png">
 <meta property="og:image" content="https://coder-zhuyu.github.io/images/blog/mysql-index2.png">
-<meta property="og:updated_time" content="2019-05-18T04:27:14.470Z">
+<meta property="og:updated_time" content="2019-05-18T05:34:07.718Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mysql数据类型选择">
+<meta name="twitter:title" content="mysql索引总结">
 <meta name="twitter:description" content="InnoDB为啥用B+树做索引结构 Hash索引Hash只能做精确的等值查询，不能做部分匹配，不能做范围查询，不能排序 有序数组数组对于增删操作需要移动后面的数据 平衡二叉查找树数据量大时，树的高度相对会大，中序遍历可以得到一个有序序列，但是不足以按照区间快速查找数据 B树不能支持范围查询，排序 B+树叶子节点是一个有序链表 跳跃表类似与B+树，也是可以的  InnoDB数据存储方式MySQL的数">
 <meta name="twitter:image" content="https://coder-zhuyu.github.io/images/blog/mysql-index.png">
 
@@ -142,7 +142,7 @@
 
 
 
-  <title>mysql数据类型选择 | coder-zhuyu博客</title>
+  <title>mysql索引总结 | coder-zhuyu博客</title>
   
 
 
@@ -312,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">mysql数据类型选择</h1>
+          <h1 class="post-title" itemprop="name headline">mysql索引总结</h1>
         
 
         <div class="post-meta">
